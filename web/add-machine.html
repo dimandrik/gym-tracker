@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новый тренажёр — Strength Tracker</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="add-machine-screen">
+    <header class="screen-header">
+        <h1 class="screen-title">Новый тренажёр</h1>
+    </header>
+
+    <form class="add-machine-form" id="add-machine-form" novalidate>
+
+        <label class="photo-picker" for="photo-input">
+            <img class="photo-picker__preview" id="photo-preview" style="display: none;">
+            <span class="photo-picker__placeholder" id="photo-placeholder">Сфотографируйте тренажёр, фото станет обложкой карточки</span>
+        </label>
+        <input type="file" id="photo-input" accept="image/*" capture="environment" style="display: none;" required>
+
+        <div class="form-field">
+            <label class="form-label" for="name">Название</label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="Например, Жим лёжа" required>
+        </div>
+
+        <p class="auth-error" id="error-message" style="display: none;"></p>
+
+        <button class="btn btn--primary" type="submit">Сохранить</button>
+
+    </form>
+</main>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/add-machine.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+getToken(); // редиректит на login.html, если пользователь не залогинен
+
+async function getMachines() {
+    return apiFetch('/api/machines');
+}
+
+// собирает DOM-карточку тренажёра для сетки на главном экране
+function createMachineCard(machine) {
+    const card = document.createElement('a');
+    card.className = 'machine-card';
+    card.href = 'machine.html?id=' + machine.id;
+
+    const img = document.createElement('img');
+    img.className = 'machine-card__photo';
+    img.src = API_BASE_URL + machine.photo_url;
+    img.alt = machine.name;
+
+    const name = document.createElement('p');
+    name.className = 'machine-card__name';
+    name.textContent = machine.name;
+
+    card.appendChild(img);
+    card.appendChild(name);
+
+    return card;
+}
+
+async function loadMachines() {
+    const grid = document.querySelector('#machines-grid');
+    try {
+        const machines = await getMachines();
+        machines.forEach(function(machine) {
+            const card = createMachineCard(machine);
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        grid.textContent = 'Не удалось загрузить тренажёры';
+    }
+}
+
+loadMachines(); // запускаем загрузку сразу при открытии страницы

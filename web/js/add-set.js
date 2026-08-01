@@ -1,0 +1,102 @@
+const form = document.querySelector('.add-set-form');
+const machineId = new URLSearchParams(window.location.search).get('machine_id');
+const weightInput = document.querySelector('#weight');
+const repsInput = document.querySelector('#reps');
+const errorEl = document.querySelector('#error-message');
+const backLink = document.querySelector('#back-link');
+const toastEl = document.querySelector('#toast');
+const toastMessageEl = document.querySelector('#toast-message');
+let toastTimeout;
+
+getToken();
+
+backLink.href = 'machine.html?id=' + machineId;
+
+// Кнопки +/- у полей веса и повторов — шаг и минимум берутся из
+// data-атрибутов кнопки/инпута в разметке, а не хардкодятся здесь.
+document.querySelectorAll('.stepper__btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const target = document.querySelector('#' + btn.dataset.target);
+        const step = parseFloat(btn.dataset.step);
+        const min = parseFloat(target.min);
+        const current = parseFloat(target.value) || 0;
+        target.value = Math.max(min, current + step);
+    });
+});
+
+function showError(message) {
+    errorEl.textContent = message;
+    errorEl.style.display = 'block';
+}
+
+function hideError() {
+    errorEl.style.display = 'none';
+}
+
+function showToast(message) {
+    clearTimeout(toastTimeout);
+    toastMessageEl.textContent = message;
+    toastEl.classList.add('toast--visible');
+    toastTimeout = setTimeout(function() {
+        toastEl.classList.remove('toast--visible');
+    }, 1500);
+}
+
+// Общая логика сохранения для обеих кнопок ("сохранить и добавить ещё" и
+// "готово") и для submit формы — сама показывает ошибку и возвращает
+// true/false, чтобы вызывающий код решал, что делать дальше.
+async function saveSet() {
+    const weight = parseFloat(weightInput.value);
+    const reps = parseInt(repsInput.value, 10);
+
+    if (!weight || !reps) {
+        showError('Укажите вес и количество повторов');
+        return false;
+    }
+
+    try {
+        await addSet(machineId, weight, reps);
+        hideError();
+        return true;
+    } catch (error) {
+        showError(error.message);
+        return false;
+    }
+}
+
+document.querySelector('#save-and-add-btn').addEventListener('click', async function() {
+    if (await saveSet()) {
+        showToast('Подход записан');
+    }
+});
+
+function finish() {
+    showToast('Подход записан');
+    setTimeout(function() {
+        window.location.href = 'machine.html?id=' + machineId;
+    }, 600);
+}
+
+document.querySelector('#done-btn').addEventListener('click', async function() {
+    if (await saveSet()) {
+        finish();
+    }
+});
+
+form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    if (await saveSet()) {
+        finish();
+    }
+});
+
+async function loadMachine() {
+    try {
+        const machine = await getMachine(machineId);
+        document.querySelector('#machine-name').textContent = machine.name;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+loadMachine()

@@ -1,0 +1,38 @@
+:root {
+    /* Фон */
+    --bg-primary: #14110D;      /* фон экрана / карточки */
+    --bg-surface: #1c1813;      /* поля ввода, поверхности */
+
+    /* Текст */
+    --text-primary: #f5f1ea;    /* заголовки, ввод */
+    --text-secondary: #8f877b;  /* подписи, вторичный текст */
+    --text-muted: #5c554a;      /* плейсхолдеры */
+
+    /* Акцент */
+    --accent: #2ecbff;
+    --accent-hover: #5fd8ff;
+    --on-accent: #14110D;       /* текст на акцентной кнопке */
+
+    /* Границы */
+    --border: #2f2920;          /* обводка полей */
+    --border-subtle: #241f18;   /* тонкие разделители */
+
+    /* Шрифты */
+    --font-heading: 'Newsreader', serif;
+    --font-body: 'Instrument Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+
+    /* Скругления */
+    --radius-input: 14px;
+    --radius-btn: 16px;
+    --radius-logo: 15px;
+
+    /* Отступы */
+    --spacing-unit: 8px;
+    --screen-padding: 34px;
+
+    /* Ошибки */
+    --error-bg: rgba(255, 69, 58, 0.12);
+    --error-border: #ff453a;
+    --error-text: #ff6961;
+}

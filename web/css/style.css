@@ -1,0 +1,798 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+/* ===== Базовый сброс ===== */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-body), serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Экран авторизации ===== */
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px var(--screen-padding);
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* ===== Логотип ===== */
+.auth-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-logo);
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 26px;
+}
+
+.auth-logo__mark {
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--bg-primary);
+    border-radius: 5px;
+}
+
+/* ===== Заголовок ===== */
+.auth-header {
+    margin-bottom: 38px;
+}
+
+.auth-title {
+    margin: 0;
+    font-family: var(--font-heading), serif;
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.auth-subtitle {
+    margin: 8px 0 0;
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+/* ===== Форма ===== */
+.form-field {
+    margin-bottom: 18px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.form-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 18px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    font-family: var(--font-body), serif;
+    font-size: 16px;
+    color: var(--text-primary);
+    transition: border-color 0.15s ease;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.auth-error {
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: var(--radius-input);
+    color: var(--error-text);
+    font-size: 14px;
+}
+
+/* ===== Кнопка ===== */
+.btn {
+    width: 100%;
+    height: 58px;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-body), serif;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.btn--primary {
+    margin-top: 28px;
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.btn--primary:hover {
+    background: var(--accent-hover);
+}
+
+/* ===== Переключатель входа / регистрации ===== */
+.auth-switch {
+    margin: 22px 0 0;
+    text-align: center;
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+.auth-switch__link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-switch__link:hover {
+    color: var(--accent-hover);
+}
+
+/* ===== Список тренажёров ===== */
+.machines-screen {
+    min-height: 100vh;
+    padding: 34px var(--screen-padding) 100px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.screen-header {
+    margin-bottom: 24px;
+}
+
+.screen-title {
+    margin: 0;
+    font-family: var(--font-heading), serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.machines-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.machine-card {
+    display: block;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+}
+
+.machine-card__photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background: var(--border-subtle);
+}
+
+.machine-card__name {
+    margin: 0;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.fab {
+    position: fixed;
+    right: var(--screen-padding);
+    bottom: 90px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 400;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+/* ===== Нижний таб-бар ===== */
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    padding: 12px var(--screen-padding);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+
+.tab-bar__item {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tab-bar__item--active {
+    color: var(--accent);
+}
+
+/* ===== Экран добавления тренажёра ===== */
+.add-machine-screen {
+    min-height: 100vh;
+    padding: 34px var(--screen-padding) 48px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.photo-picker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-input);
+    margin-bottom: 24px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.photo-picker__preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-picker__placeholder {
+    padding: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* ===== Экран карточки тренажёра ===== */
+.machine-screen {
+    min-height: 100vh;
+    padding: 0 0 120px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.machine-hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+}
+
+.machine-hero__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-surface);
+}
+
+.machine-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            to top,
+            var(--bg-primary) 0%,
+            rgba(20, 17, 13, 0.85) 18%,
+            rgba(20, 17, 13, 0.55) 36%,
+            rgba(20, 17, 13, 0.25) 55%,
+            rgba(20, 17, 13, 0) 80%
+    );
+    pointer-events: none;
+}
+
+.machine-hero__back {
+    position: absolute;
+    top: 20px;
+    left: var(--screen-padding);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(20, 17, 13, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.machine-hero__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 var(--screen-padding) 16px;
+}
+
+.machine-hero__name {
+    margin: 0;
+    font-family: var(--font-heading), serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.machine-hero__record {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: rgba(245, 241, 234, 0.8);
+}
+
+.machine-screen__actions {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 2 * var(--screen-padding));
+    max-width: 448px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.machine-screen__edit-btn {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.machine-screen__edit-btn span {
+    font-size: 9px;
+    color: var(--text-muted);
+    transition: color 0.18s ease;
+}
+
+.machine-screen__edit-btn--active {
+    border: 1.5px solid var(--accent);
+    background: rgba(46, 203, 255, 0.12);
+    color: var(--accent);
+}
+
+.machine-screen__edit-btn--active span {
+    color: var(--accent);
+}
+
+.machine-screen__add-btn {
+    flex: 1;
+    width: auto;
+    margin-top: 0;
+    text-align: center;
+    line-height: 58px;
+    text-decoration: none;
+    display: block;
+    transition: opacity 0.18s ease;
+}
+
+.machine-screen__add-btn--disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.history-set__delete-btn {
+    width: 0;
+    min-width: 0;
+    height: 22px;
+    border-radius: 6px;
+    background: #e5484d;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    margin-right: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: width 0.22s ease, margin-right 0.22s ease, opacity 0.16s ease;
+}
+
+.history-list--edit-mode .history-set__delete-btn {
+    width: 22px;
+    margin-right: 10px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.history-set--editable {
+    cursor: pointer;
+}
+
+/* ===== Список истории по дням ===== */
+.history-list {
+    padding: 12px var(--screen-padding) 0;
+}
+
+.history-day {
+    margin-bottom: 20px;
+}
+
+.history-day__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.history-day__date {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.history-day__count {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.history-day__sets {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-btn);
+    overflow: hidden;
+}
+
+.history-set {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px;
+}
+
+.history-set:last-child {
+    border-bottom: none;
+}
+
+.history-set__label {
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.history-set__value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ===== Подтверждение удаления подхода ===== */
+.confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.confirm-modal[hidden] {
+    display: none;
+}
+
+.confirm-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.confirm-modal__sheet {
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 420px;
+    margin-bottom: 40px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 24px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.confirm-modal--visible .confirm-modal__backdrop {
+    opacity: 1;
+}
+
+.confirm-modal--visible .confirm-modal__sheet {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.confirm-modal__title {
+    margin: 0 0 8px;
+    font-family: var(--font-heading), serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.confirm-modal__desc {
+    margin: 0 0 24px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.confirm-modal__delete-btn,
+.confirm-modal__cancel-btn {
+    width: 100%;
+    height: 54px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.confirm-modal__delete-btn {
+    border: none;
+    background: #e5484d;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.confirm-modal__cancel-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+/* ===== Экран добавления подхода ===== */
+.add-set-screen {
+    min-height: 100vh;
+    padding: 34px var(--screen-padding) 48px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.add-set-screen__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.add-set-screen__back {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.add-set-screen__title {
+    font-size: 24px;
+}
+
+.add-set-screen__machine-name {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.form-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.stepper {
+    flex: 1;
+}
+
+.stepper__box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    padding: 14px 0;
+    text-align: center;
+}
+
+.stepper__value {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-family: var(--font-mono), monospace;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--text-primary);
+    -moz-appearance: textfield;
+}
+
+.stepper__value::-webkit-outer-spin-button,
+.stepper__value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper__controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stepper__btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-family: var(--font-body), sans-serif;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.stepper__btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.stepper__btn:active {
+    background: var(--border-subtle);
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translate(-50%, 12px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 14px 22px;
+    border-radius: var(--radius-btn);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 100;
+}
+
+.toast--visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.toast__icon {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.btn--secondary {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn--secondary:hover {
+    background: rgba(46, 203, 255, 0.08);
+}
+
+#add-set-form .btn--secondary {
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+#add-set-form .btn--primary {
+    margin-top: 0;
+}
+
+#edit-set-form .btn--primary {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+#edit-set-form .btn--danger {
+    margin-top: 0;
+}
+
+.btn--danger {
+    background: transparent;
+    border: 1px solid #e5484d;
+    color: #e5484d;
+}
+
+.btn--danger:hover {
+    background: rgba(229, 72, 77, 0.08);
+}
+
+/* ===== История тренировок ===== */
+.workout-history {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.workout-day-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    padding: 16px 18px;
+}
+
+.workout-day-card__date {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.workout-day-card__summary {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}

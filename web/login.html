@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Strength Tracker</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="auth-screen">
+
+    <!-- Логотип -->
+    <div class="auth-logo">
+        <span class="auth-logo__mark"></span>
+    </div>
+
+    <!-- Заголовок -->
+    <header class="auth-header">
+        <h1 class="auth-title">С возвращением</h1>
+        <p class="auth-subtitle">Войдите, чтобы продолжить</p>
+    </header>
+
+    <!-- Форма входа -->
+    <p class="auth-error" id="error-message" style="display: none;"></p>
+    <form class="auth-form" action="#" method="post">
+
+        <div class="form-field">
+            <label class="form-label" for="email">Email</label>
+            <input
+                class="form-input"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <div class="form-field">
+            <label class="form-label" for="password">Пароль</label>
+            <input
+                class="form-input"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <button class="btn btn--primary" type="submit">Войти</button>
+
+    </form>
+
+    <!-- Переключатель на регистрацию -->
+    <p class="auth-switch">
+        Нет аккаунта?
+        <a class="auth-switch__link" href="register.html">Регистрация</a>
+    </p>
+
+</main>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

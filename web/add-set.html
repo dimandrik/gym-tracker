@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новый подход — Strength Tracker</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="add-set-screen">
+    <div class="add-set-screen__header">
+        <a href="#" class="add-set-screen__back" id="back-link" aria-label="Назад">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </a>
+        <div>
+            <h1 class="screen-title add-set-screen__title">Новый подход</h1>
+            <p class="add-set-screen__machine-name" id="machine-name"></p>
+        </div>
+    </div>
+
+    <form class="add-set-form" id="add-set-form" novalidate>
+
+        <div class="form-row">
+            <div class="stepper">
+                <label class="form-label" for="weight">Вес, кг</label>
+                <div class="stepper__box">
+                    <input class="stepper__value" type="number" id="weight" name="weight" value="20" step="2.5" min="0" required>
+                    <div class="stepper__controls">
+                        <button class="stepper__btn" type="button" data-target="weight" data-step="-2.5" aria-label="Уменьшить вес">−</button>
+                        <button class="stepper__btn" type="button" data-target="weight" data-step="2.5" aria-label="Увеличить вес">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="stepper">
+                <label class="form-label" for="reps">Повторы</label>
+                <div class="stepper__box">
+                    <input class="stepper__value" type="number" id="reps" name="reps" value="8" step="1" min="1" required>
+                    <div class="stepper__controls">
+                        <button class="stepper__btn" type="button" data-target="reps" data-step="-1" aria-label="Уменьшить повторы">−</button>
+                        <button class="stepper__btn" type="button" data-target="reps" data-step="1" aria-label="Увеличить повторы">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="auth-error" id="error-message" style="display: none;"></p>
+
+        <button class="btn btn--secondary" type="button" id="save-and-add-btn">Сохранить и добавить ещё</button>
+        <button class="btn btn--primary" type="button" id="done-btn">Готово</button>
+
+    </form>
+
+    <div class="toast" id="toast">
+        <span class="toast__icon">✓</span>
+        <span id="toast-message"></span>
+    </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/add-set.js"></script>
+</body>
+</html>

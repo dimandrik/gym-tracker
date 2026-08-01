@@ -1,0 +1,42 @@
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"gym_tracker/internal/config"
+	"gym_tracker/internal/db"
+	"gym_tracker/internal/handlers"
+	"gym_tracker/internal/repository"
+	"gym_tracker/internal/router"
+)
+
+func main() {
+	cfg := config.Load()
+	pool, err := db.NewPool(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pool.Close()
+	log.Println("connected to database")
+
+	// repositories talk to postgres, handlers talk to repositories — kept as
+	// separate layers so handlers stay free of SQL
+	userRepo := repository.NewUserRepository(pool)
+	machineRepo := repository.NewMachineRepository(pool)
+	workoutRepo := repository.NewWorkoutRepository(pool)
+	workoutItemRepo := repository.NewWorkoutItemRepository(pool)
+	setRepo := repository.NewSetRepository(pool)
+
+	authHandler := handlers.NewAuthHandler(userRepo, cfg.JWTSecret)
+	machineHandler := handlers.NewMachineHandler(machineRepo, "uploads")
+	setHandler := handlers.NewSetHandler(workoutRepo, workoutItemRepo, setRepo)
+	workoutHandler := handlers.NewWorkoutHandler(workoutRepo)
+
+	mux := router.New(authHandler, machineHandler, setHandler, workoutHandler, cfg.JWTSecret)
+
+	log.Printf("starting server on port %s", cfg.Port)
+	if err := http.ListenAndServe(":"+cfg.Port, mux); err != nil {
+		log.Fatal(err)
+	}
+}
