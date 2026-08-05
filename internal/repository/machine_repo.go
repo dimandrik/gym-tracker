@@ -59,3 +59,27 @@ func (r *MachineRepository) GetMachineByID(ctx context.Context, id string) (*mod
 	}
 	return &m, nil
 }
+
+func (r *MachineRepository) DeleteMachine(ctx context.Context, machineID, userID string) error {
+	result, err := r.pool.Exec(ctx, "DELETE FROM machines WHERE id = $1 AND user_id = $2", machineID, userID)
+	if err != nil {
+		return fmt.Errorf("failed to delete machine: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("machine not found or not owned by user")
+	}
+	return nil
+}
+
+func (r *MachineRepository) UpdateMachine(ctx context.Context, machineID, userID, name, photoURL string) error {
+	result, err := r.pool.Exec(ctx,
+		"UPDATE machines SET name = $1, photo_url = $2 WHERE id = $3 AND user_id = $4",
+		name, photoURL, machineID, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update machine: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("machine not found or not owned by user")
+	}
+	return nil
+}

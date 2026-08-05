@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изменить тренажёр — Strength Tracker</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="add-machine-screen">
+    <div class="add-set-screen__header">
+        <a href="#" class="add-set-screen__back" id="back-link" aria-label="Назад">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </a>
+        <h1 class="screen-title add-set-screen__title">Изменить тренажёр</h1>
+    </div>
+
+    <form class="add-machine-form" id="edit-machine-form" novalidate>
+
+        <label class="photo-picker" for="photo-input">
+            <img class="photo-picker__preview" id="photo-preview" alt="Фото тренажёра">
+            <span class="photo-picker__overlay">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                </svg>
+                Заменить фото
+            </span>
+        </label>
+        <input type="file" id="photo-input" accept="image/*" capture="environment" style="display: none;">
+
+        <div class="form-field">
+            <label class="form-label" for="name">Название</label>
+            <input class="form-input" type="text" id="name" name="name" required>
+        </div>
+
+        <p class="auth-error" id="error-message" style="display: none;"></p>
+
+        <button class="btn btn--primary" type="submit">Сохранить</button>
+        <button class="btn btn--danger" type="button" id="delete-machine-btn">Удалить тренажёр</button>
+
+    </form>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/edit-machine.js"></script>
+</body>
+</html>

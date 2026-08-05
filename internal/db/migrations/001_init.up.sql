@@ -21,12 +21,12 @@ CREATE TABLE workouts (
 CREATE TABLE workout_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     workout_id UUID NOT NULL REFERENCES workouts(id),
-    machine_id UUID NOT NULL REFERENCES machines(id)
+    machine_id UUID NOT NULL REFERENCES machines(id) ON DELETE CASCADE
 );
 
 CREATE TABLE sets (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    workout_item_id UUID NOT NULL REFERENCES workout_items(id),
+    workout_item_id UUID NOT NULL REFERENCES workout_items(id) ON DELETE CASCADE,
     set_number INT NOT NULL,
     weight_kg NUMERIC(5,1) NOT NULL,
     reps INT NOT NULL

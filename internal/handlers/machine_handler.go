@@ -84,3 +84,56 @@ func (h *MachineHandler) GetMachine(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(machine)
 }
+
+func (h *MachineHandler) DeleteMachine(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	machineID := r.PathValue("id")
+
+	err := h.machineRepo.DeleteMachine(r.Context(), machineID, userID)
+	if err != nil {
+		http.Error(w, "machine not found", http.StatusNotFound)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+	machineID := r.PathValue("id")
+
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, "invalid form data", http.StatusBadRequest)
+		return
+	}
+
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name is required", http.StatusBadRequest)
+		return
+	}
+
+	existingMachine, err := h.machineRepo.GetMachineByID(r.Context(), machineID)
+	if err != nil {
+		http.Error(w, "machine not found", http.StatusNotFound)
+		return
+	}
+
+	photoURL := existingMachine.PhotoURL
+
+	file, header, err := r.FormFile("photo")
+	if err == nil {
+		defer file.Close()
+		photoURL, err = storage.SaveFile(file, header, h.uploadDir)
+		if err != nil {
+			http.Error(w, "failed to save photo", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	if err := h.machineRepo.UpdateMachine(r.Context(), machineID, userID, name, photoURL); err != nil {
+		http.Error(w, "failed to update machine", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}

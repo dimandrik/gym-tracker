@@ -30,6 +30,8 @@ func New(
 	mux.HandleFunc("DELETE /api/sets/{id}", authMiddleware(setHandler.DeleteSet))
 	mux.HandleFunc("PUT /api/sets/{id}", authMiddleware(setHandler.UpdateSet))
 	mux.HandleFunc("GET /api/sets/{id}", authMiddleware(setHandler.GetSet))
+	mux.HandleFunc("PUT /api/machines/{id}", authMiddleware(machineHandler.UpdateMachine))
+	mux.HandleFunc("DELETE /api/machines/{id}", authMiddleware(machineHandler.DeleteMachine))
 
 	// serves uploaded machine photos directly from disk
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("uploads"))))

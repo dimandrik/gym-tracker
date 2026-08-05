@@ -7,6 +7,7 @@ let pendingDeleteSetId = null;
 
 const editToggleBtn = document.querySelector('#edit-toggle-btn');
 const addSetLink = document.querySelector('#add-set-link');
+const editMachineLink = document.querySelector('#edit-machine-link');
 const historyList = document.querySelector('#history-list');
 const confirmModal = document.querySelector('#delete-confirm-modal');
 const confirmModalDesc = document.querySelector('#confirm-modal-desc');
@@ -23,6 +24,7 @@ async function loadMachine() {
         document.querySelector('#machine-photo').alt = machine.name;
         document.querySelector('#machine-name').textContent = machine.name;
         addSetLink.href = 'add-set.html?machine_id=' + machine.id;
+        editMachineLink.href = 'edit-machine.html?id=' + machine.id;
 
         const sets = await getSets(machineId);
 

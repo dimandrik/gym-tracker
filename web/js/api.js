@@ -66,3 +66,14 @@ async function updateSet(id, weightKg, reps) {
         body: JSON.stringify({ weight_kg: weightKg, reps: reps })
     });
 }
+
+async function updateMachine(id, formData) {
+    return apiFetch('/api/machines/' + id, {
+        method: 'PUT',
+        body: formData
+    });
+}
+
+async function deleteMachine(id) {
+    return apiFetch('/api/machines/' + id, { method: 'DELETE' });
+}
