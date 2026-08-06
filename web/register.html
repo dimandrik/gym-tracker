@@ -25,6 +25,33 @@
     <!-- Форма входа -->
     <form class="auth-form" action="#" method="post" novalidate>
 
+        <div class="form-row">
+            <div class="form-field">
+                <label class="form-label" for="first-name">Имя</label>
+                <input
+                        class="form-input"
+                        type="text"
+                        id="first-name"
+                        name="first_name"
+                        placeholder="Алексей"
+                        autocomplete="given-name"
+                        required
+                >
+            </div>
+            <div class="form-field">
+                <label class="form-label" for="last-name">Фамилия</label>
+                <input
+                        class="form-input"
+                        type="text"
+                        id="last-name"
+                        name="last_name"
+                        placeholder="Иванов"
+                        autocomplete="family-name"
+                        required
+                >
+            </div>
+        </div>
+
         <div class="form-field">
             <label class="form-label" for="email">Email</label>
             <input

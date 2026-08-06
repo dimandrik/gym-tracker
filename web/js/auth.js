@@ -23,6 +23,11 @@ async function loginUser(email, password) {
     return postJSON('/api/login', { email: email, password: password });
 }
 
-async function registerUser(email, password) {
-    return postJSON('/api/register', { email: email, password: password });
+async function registerUser(email, password, firstName, lastName) {
+    return postJSON('/api/register', {
+        email: email,
+        password: password,
+        first_name: firstName,
+        last_name: lastName
+    });
 }

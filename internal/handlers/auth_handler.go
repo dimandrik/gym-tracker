@@ -7,7 +7,11 @@ import (
 	"gym_tracker/internal/repository"
 	"log"
 	"net/http"
+	"regexp"
+	"strings"
 )
+
+var emailRegex = regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 
 type AuthHandler struct {
 	userRepo  *repository.UserRepository
@@ -15,8 +19,10 @@ type AuthHandler struct {
 }
 
 type RegisterRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 }
 
 type LoginRequest struct {
@@ -36,13 +42,27 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
+
+	if req.FirstName == "" || req.LastName == "" {
+		http.Error(w, "first name and last name are required", http.StatusBadRequest)
+		return
+	}
+	if !emailRegex.MatchString(req.Email) {
+		http.Error(w, "invalid email format", http.StatusBadRequest)
+		return
+	}
+	if err := validatePassword(req.Password); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	hash, err := auth.HashPassword(req.Password)
 	if err != nil {
 		http.Error(w, "failed to hash password", http.StatusInternalServerError)
 		return
 	}
 
-	userID, err := h.userRepo.CreateUser(r.Context(), req.Email, hash)
+	userID, err := h.userRepo.CreateUser(r.Context(), req.Email, hash, req.FirstName, req.LastName)
 	if err != nil {
 		if errors.Is(err, repository.ErrEmailAlreadyExists) {
 			http.Error(w, "email already exists", http.StatusConflict)
@@ -96,4 +116,27 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(map[string]string{"token": token}); err != nil {
 		log.Println("failed to encode response:", err)
 	}
+}
+
+func validatePassword(password string) error {
+	if len(password) < 8 {
+		return errors.New("password must be at least 8 characters")
+	}
+	hasDigit := false
+	hasSpecial := false
+	for _, ch := range password {
+		if ch >= '0' && ch <= '9' {
+			hasDigit = true
+		}
+		if strings.ContainsRune("!@#$%^&*(),.?\":{}|<>", ch) {
+			hasSpecial = true
+		}
+	}
+	if !hasDigit {
+		return errors.New("password must contain at least one digit")
+	}
+	if !hasSpecial {
+		return errors.New("password must contain at least one special character")
+	}
+	return nil
 }

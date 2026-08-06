@@ -20,8 +20,8 @@ func NewUserRepository(pool *pgxpool.Pool) *UserRepository {
 	return &UserRepository{pool}
 }
 
-func (r *UserRepository) CreateUser(ctx context.Context, email, passwordHash string) (string, error) {
-	row := r.pool.QueryRow(ctx, "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id", email, passwordHash)
+func (r *UserRepository) CreateUser(ctx context.Context, email, passwordHash, firstName, lastName string) (string, error) {
+	row := r.pool.QueryRow(ctx, "INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id", email, passwordHash, firstName, lastName)
 	var id string
 	err := row.Scan(&id)
 	if err != nil {
@@ -36,9 +36,9 @@ func (r *UserRepository) CreateUser(ctx context.Context, email, passwordHash str
 }
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
-	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash FROM users WHERE email = $1", email)
+	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name FROM users WHERE email = $1", email)
 	var u models.User
-	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash)
+	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
