@@ -30,3 +30,12 @@ type SetDetail struct {
 	WeightKg    float64   `json:"weight_kg"`
 	Reps        int       `json:"reps"`
 }
+
+type DaySetEntry struct {
+	MachineID       string  `json:"machine_id"`
+	MachineName     string  `json:"machine_name"`
+	MachinePhotoURL string  `json:"machine_photo_url"`
+	SetNumber       int     `json:"set_number"`
+	WeightKg        float64 `json:"weight_kg"`
+	Reps            int     `json:"reps"`
+}

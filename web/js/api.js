@@ -77,3 +77,7 @@ async function updateMachine(id, formData) {
 async function deleteMachine(id) {
     return apiFetch('/api/machines/' + id, { method: 'DELETE' });
 }
+
+async function getSetsByDate(date) {
+    return apiFetch('/api/workouts/day?date=' + date);
+}

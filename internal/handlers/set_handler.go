@@ -129,3 +129,26 @@ func (h *SetHandler) GetSet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(set)
 }
+
+func (h *SetHandler) GetSetsByDate(w http.ResponseWriter, r *http.Request) {
+	UserID := r.Context().Value(middleware.UserIDKey).(string)
+	dateStr := r.URL.Query().Get("date")
+	if dateStr == "" {
+		http.Error(w, "date is required", http.StatusBadRequest)
+		return
+	}
+	date, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		http.Error(w, "invalid date format, expected YYYY-MM-DD", http.StatusBadRequest)
+		return
+	}
+
+	sets, err := h.setRepo.GetSetsByDate(r.Context(), UserID, date)
+	if err != nil {
+		http.Error(w, "failed to get sets", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(sets)
+}

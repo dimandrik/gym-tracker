@@ -797,10 +797,19 @@ body {
 }
 
 .workout-day-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     background: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-input);
     padding: 16px 18px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.workout-day-card__body {
+    flex: 1;
 }
 
 .workout-day-card__date {
@@ -811,9 +820,16 @@ body {
 }
 
 .workout-day-card__summary {
-    margin: 6px 0 0;
-    font-size: 14px;
+    margin: 5px 0 0;
+    font-family: var(--font-mono), monospace;
+    font-size: 13px;
     color: var(--text-secondary);
+}
+
+.workout-day-card__chevron {
+    flex-shrink: 0;
+    font-size: 20px;
+    color: var(--text-muted);
 }
 
 /* ===== экран изменения тренажера ===== */
@@ -838,4 +854,82 @@ body {
 
 #edit-machine-form .btn--danger {
     margin-top: 12px;
+}
+
+/* ===== Детали дня из истории ===== */
+.day-screen {
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.day-screen__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px var(--screen-padding) 18px;
+}
+
+.day-screen__date {
+    margin: 0;
+    font-family: var(--font-heading), serif;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.day-screen__meta {
+    margin: 2px 0 0;
+    font-family: var(--font-mono), monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.day-machines {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 var(--screen-padding) 20px;
+}
+
+.day-machine-block__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.day-machine-block__photo {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.day-machine-block__name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.day-machine-block .history-set {
+    background: var(--bg-surface);
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+}
+
+.day-machine-block .history-set:first-child {
+    border-top: 1px solid var(--border-subtle);
+    border-top-left-radius: var(--radius-input);
+    border-top-right-radius: var(--radius-input);
+}
+
+.day-machine-block .history-set:last-child {
+    border-bottom-left-radius: var(--radius-input);
+    border-bottom-right-radius: var(--radius-input);
 }

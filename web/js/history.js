@@ -21,13 +21,19 @@ async function loadHistory() {
 }
 
 function createDayCard(day) {
-    const card = document.createElement('div');
+    const dateOnly = day.workout_date.split('T')[0];
+
+    const card = document.createElement('a');
     card.className = 'workout-day-card';
+    card.href = 'day.html?date=' + dateOnly;
+
+    const body = document.createElement('div');
+    body.className = 'workout-day-card__body';
 
     const dateEl = document.createElement('p');
     dateEl.className = 'workout-day-card__date';
 
-    const formattedDate = formatDate(day.workout_date.split('T')[0]);
+    const formattedDate = formatDate(dateOnly);
     if (isToday(day.workout_date)) {
         dateEl.textContent = 'Сегодня, ' + formattedDate;
     } else {
@@ -38,8 +44,15 @@ function createDayCard(day) {
     summaryEl.className = 'workout-day-card__summary';
     summaryEl.textContent = day.machines_count + ' тренажёра · ' + day.sets_count + ' подходов';
 
-    card.appendChild(dateEl);
-    card.appendChild(summaryEl);
+    body.appendChild(dateEl);
+    body.appendChild(summaryEl);
+
+    const chevron = document.createElement('span');
+    chevron.className = 'workout-day-card__chevron';
+    chevron.textContent = '›';
+
+    card.appendChild(body);
+    card.appendChild(chevron);
 
     return card;
 }

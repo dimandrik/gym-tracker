@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"gym_tracker/internal/models"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -158,4 +159,34 @@ func (r *SetRepository) GetSetByID(ctx context.Context, setID, userID string) (*
 	}
 	return &s, nil
 
+}
+
+func (r *SetRepository) GetSetsByDate(ctx context.Context, userID string, date time.Time) ([]models.DaySetEntry, error) {
+	rows, err := r.pool.Query(ctx, `
+	SELECT machines.id, machines.name, machines.photo_url, sets.set_number, sets.weight_kg, sets.reps
+	FROM sets
+	JOIN workout_items ON sets.workout_item_id = workout_items.id
+	JOIN machines ON workout_items.machine_id = machines.id
+	JOIN workouts ON workout_items.workout_id = workouts.id
+	WHERE workouts.user_id = $1 AND workouts.workout_date = $2
+	ORDER BY machines.name, sets.set_number
+`, userID, date)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get sets by date: %w", err)
+	}
+	defer rows.Close()
+
+	var entries []models.DaySetEntry
+	for rows.Next() {
+		var e models.DaySetEntry
+		if err := rows.Scan(&e.MachineID, &e.MachineName, &e.MachinePhotoURL, &e.SetNumber, &e.WeightKg, &e.Reps); err != nil {
+			return nil, fmt.Errorf("failed to scan day set entry: %w", err)
+		}
+		entries = append(entries, e)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+	return entries, nil
 }
