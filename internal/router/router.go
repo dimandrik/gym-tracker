@@ -11,6 +11,7 @@ func New(
 	machineHandler *handlers.MachineHandler,
 	setHandler *handlers.SetHandler,
 	workoutHandler *handlers.WorkoutHandler,
+	userHandler *handlers.UserHandler,
 	jwtSecret string,
 ) http.Handler {
 	mux := http.NewServeMux()
@@ -33,7 +34,12 @@ func New(
 	mux.HandleFunc("PUT /api/machines/{id}", authMiddleware(machineHandler.UpdateMachine))
 	mux.HandleFunc("DELETE /api/machines/{id}", authMiddleware(machineHandler.DeleteMachine))
 	mux.HandleFunc("GET /api/workouts/day", authMiddleware(setHandler.GetSetsByDate))
-	
+	mux.HandleFunc("GET /api/user/profile", authMiddleware(userHandler.GetProfile))
+	mux.HandleFunc("PUT /api/user/name", authMiddleware(userHandler.UpdateName))
+	mux.HandleFunc("PUT /api/user/email", authMiddleware(userHandler.UpdateEmail))
+	mux.HandleFunc("PUT /api/user/password", authMiddleware(userHandler.UpdatePassword))
+	mux.HandleFunc("DELETE /api/user/account", authMiddleware(userHandler.DeleteAccount))
+
 	// serves uploaded machine photos directly from disk
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("uploads"))))
 

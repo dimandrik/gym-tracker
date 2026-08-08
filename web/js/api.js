@@ -20,7 +20,9 @@ async function apiFetch(path, options) {
 
     if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(errorText);
+        const error = new Error(errorText);
+        error.status = response.status;
+        throw error;
     }
 
     // DELETE/PUT respond 204 No Content — no body to parse
@@ -80,4 +82,40 @@ async function deleteMachine(id) {
 
 async function getSetsByDate(date) {
     return apiFetch('/api/workouts/day?date=' + date);
+}
+
+async function getProfile() {
+    return apiFetch('/api/user/profile');
+}
+
+async function deleteAccount(password) {
+    return apiFetch('/api/user/account', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password })
+    });
+}
+
+async function updateName(firstName, lastName) {
+    return apiFetch('/api/user/name', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ first_name: firstName, last_name: lastName })
+    });
+}
+
+async function updateEmail(newEmail, currentPassword) {
+    return apiFetch('/api/user/email', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ new_email: newEmail, current_password: currentPassword })
+    });
+}
+
+async function updatePassword(currentPassword, newPassword) {
+    return apiFetch('/api/user/password', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+    });
 }

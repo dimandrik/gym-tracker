@@ -625,6 +625,18 @@ body {
     color: var(--text-secondary);
 }
 
+/* ===== Удаление аккаунта (12A2) ===== */
+.confirm-modal__sheet .form-field {
+    text-align: left;
+}
+
+.confirm-modal__password-input {
+    height: 54px;
+    background: var(--bg-primary);
+    font-size: 20px;
+    letter-spacing: 3px;
+}
+
 /* ===== Экран добавления подхода ===== */
 .add-set-screen {
     min-height: 100vh;
@@ -864,6 +876,151 @@ body {
 
 #edit-machine-form .btn--danger {
     margin-top: 12px;
+}
+
+/* ===== Экран настроек ===== */
+.settings-screen {
+    min-height: 100vh;
+    padding: 34px var(--screen-padding) 48px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.settings-profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 4px 22px;
+}
+
+.settings-avatar {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading), serif;
+    font-size: 22px;
+    color: var(--accent);
+}
+
+.settings-profile__name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.settings-profile__email {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.settings-section {
+    margin-bottom: 22px;
+}
+
+.settings-section__title {
+    margin: 0 4px 10px;
+    font-family: var(--font-mono), monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-btn);
+    padding: 16px 18px;
+    font-size: 15px;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.settings-row--static {
+    cursor: default;
+}
+
+.settings-row__arrow {
+    color: var(--text-muted);
+    font-size: 18px;
+}
+
+.settings-row__value {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.settings-logout-btn {
+    margin-top: 8px;
+}
+
+/* ===== Аккаунт и безопасность ===== */
+.settings-row--editable {
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.settings-section .settings-row--editable:last-child {
+    margin-bottom: 0;
+}
+
+.settings-row__label {
+    margin: 0 0 4px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.settings-row__value {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.settings-row__edit-link {
+    flex-shrink: 0;
+    margin-left: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.settings-row__edit-link:hover {
+    color: var(--accent-hover);
+}
+
+.settings-section + .settings-section {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 26px;
+}
+
+.settings-row--danger {
+    width: 100%;
+    justify-content: center;
+    background: transparent;
+    border-color: #3a2c26;
+    color: #e5484d;
+    font-family: var(--font-body), sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.settings-row--danger:hover {
+    background: rgba(229, 72, 77, 0.08);
 }
 
 /* ===== Детали дня из истории ===== */

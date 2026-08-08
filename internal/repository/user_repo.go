@@ -44,3 +44,58 @@ func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*mod
 	}
 	return &u, nil
 }
+
+func (r *UserRepository) UpdateName(ctx context.Context, userID, firstName, lastName string) error {
+	result, err := r.pool.Exec(ctx, "UPDATE users SET first_name = $1, last_name = $2 WHERE id = $3", firstName, lastName, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update name: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("user not found")
+	}
+	return nil
+}
+
+func (r *UserRepository) UpdateEmail(ctx context.Context, userID, newEmail string) error {
+	_, err := r.pool.Exec(ctx, "UPDATE users SET email = $1 WHERE id = $2", newEmail, userID)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+			return ErrEmailAlreadyExists
+		}
+		return fmt.Errorf("failed to update email: %w", err)
+	}
+	return nil
+}
+
+func (r *UserRepository) UpdatePassword(ctx context.Context, userID, newPasswordHash string) error {
+	result, err := r.pool.Exec(ctx, "UPDATE users SET password_hash = $1 WHERE id = $2", newPasswordHash, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update password: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("user not found")
+	}
+	return nil
+}
+
+func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*models.User, error) {
+	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name FROM users WHERE id = $1", id)
+	var u models.User
+	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user by id: %w", err)
+	}
+	return &u, nil
+}
+
+func (r *UserRepository) DeleteUser(ctx context.Context, userID string) error {
+	result, err := r.pool.Exec(ctx, "DELETE FROM users WHERE id = $1", userID)
+	if err != nil {
+		return fmt.Errorf("failed to delete user: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("user not found")
+	}
+	return nil
+}
