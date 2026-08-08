@@ -45,6 +45,17 @@
 
     <button class="btn btn--danger settings-logout-btn" id="logout-btn">Выйти из аккаунта</button>
 
+    <div class="confirm-modal" id="logout-modal" hidden>
+        <div class="confirm-modal__backdrop" id="logout-backdrop"></div>
+        <div class="confirm-modal__sheet">
+            <h2 class="confirm-modal__title">Выйти из аккаунта?</h2>
+            <p class="confirm-modal__desc">Данные сохранены — при следующем входе всё будет на месте</p>
+
+            <button class="confirm-modal__delete-btn" id="confirm-logout-btn">Выйти</button>
+            <button class="confirm-modal__cancel-btn" id="cancel-logout-btn">Отмена</button>
+        </div>
+    </div>
+
 </main>
 
 <script src="js/config.js"></script>

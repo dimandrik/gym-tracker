@@ -15,10 +15,28 @@ async function loadProfile() {
 
 loadProfile();
 
-document.querySelector('#logout-btn').addEventListener('click', function() {
-    if (!confirm('Выйти из аккаунта?')) {
-        return;
-    }
+const logoutModal = document.querySelector('#logout-modal');
+const logoutBackdrop = document.querySelector('#logout-backdrop');
+
+function openLogoutModal() {
+    logoutModal.hidden = false;
+    requestAnimationFrame(function() {
+        logoutModal.classList.add('confirm-modal--visible');
+    });
+}
+
+function closeLogoutModal() {
+    logoutModal.classList.remove('confirm-modal--visible');
+    setTimeout(function() {
+        logoutModal.hidden = true;
+    }, 220);
+}
+
+document.querySelector('#logout-btn').addEventListener('click', openLogoutModal);
+document.querySelector('#cancel-logout-btn').addEventListener('click', closeLogoutModal);
+logoutBackdrop.addEventListener('click', closeLogoutModal);
+
+document.querySelector('#confirm-logout-btn').addEventListener('click', function() {
     localStorage.removeItem('token');
     window.location.href = 'login.html';
 });
