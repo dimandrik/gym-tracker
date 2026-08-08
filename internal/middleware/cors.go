@@ -2,13 +2,18 @@ package middleware
 
 import "net/http"
 
-// CORS wraps a handler with permissive cross-origin headers so the frontend
-// (served separately, not from this Go binary) can call the API.
-// Origin is wide open ("*") — fine while there's a single trusted client,
-// worth tightening to a specific origin before this goes properly public.
+var allowedOrigins = map[string]bool{
+	"http://localhost:8081":      true,
+	"http://192.168.10.195:8081": true,
+}
+
 func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		origin := r.Header.Get("Origin")
+		if allowedOrigins[origin] {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		}
+
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 

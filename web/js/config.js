@@ -1,1 +1,1 @@
-const API_BASE_URL = 'http://192.168.10.195:8080';
+const API_BASE_URL = 'http://' + window.location.hostname + ':8080';
