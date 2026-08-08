@@ -41,11 +41,11 @@ async function getSets(machineId) {
     return apiFetch('/api/sets?machine_id=' + machineId);
 }
 
-async function addSet(machineId, weightKg, reps) {
+async function addSet(machineId, weightKg, reps, date) {
     return apiFetch('/api/sets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ machine_id: machineId, weight_kg: weightKg, reps: reps })
+        body: JSON.stringify({ machine_id: machineId, weight_kg: weightKg, reps: reps, date: date || '' })
     });
 }
 

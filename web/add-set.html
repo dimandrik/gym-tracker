@@ -24,6 +24,15 @@
 
     <form class="add-set-form" id="add-set-form" novalidate>
 
+        <div class="form-field">
+            <label class="form-label" for="date">Дата</label>
+            <label class="date-field" for="date">
+                <span class="date-field__value" id="date-display">Сегодня</span>
+                <span class="date-field__edit">изменить</span>
+                <input class="date-field__input" type="date" id="date" name="date">
+            </label>
+        </div>
+
         <div class="form-row">
             <div class="stepper">
                 <label class="form-label" for="weight">Вес, кг</label>
@@ -62,6 +71,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
+<script src="js/app.js"></script>
 <script src="js/add-set.js"></script>
 </body>
 </html>

@@ -22,6 +22,7 @@ type AddSetRequest struct {
 	MachineID string  `json:"machine_id"`
 	WeightKg  float64 `json:"weight_kg"`
 	Reps      int     `json:"reps"`
+	Date      string  `json:"date"`
 }
 
 type UpdateSetRequest struct {
@@ -42,6 +43,15 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	today := time.Now().Truncate(24 * time.Hour)
+	if req.Date != "" {
+		parsedDate, err := time.Parse("2006-01-02", req.Date)
+		if err != nil {
+			http.Error(w, "invalid date format, expected YYYY-MM-DD", http.StatusBadRequest)
+			return
+		}
+		today = parsedDate
+	}
+
 	workoutID, err := h.workoutRepo.GetOrCreateWorkout(r.Context(), userID, today)
 	if err != nil {
 		http.Error(w, "failed to get or create workout", http.StatusInternalServerError)

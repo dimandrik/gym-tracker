@@ -6,6 +6,10 @@ const errorEl = document.querySelector('#error-message');
 const backLink = document.querySelector('#back-link');
 const toastEl = document.querySelector('#toast');
 const toastMessageEl = document.querySelector('#toast-message');
+const dateInput = document.querySelector('#date');
+const dateDisplay = document.querySelector('#date-display');
+const todayISO = new Date().toISOString().split('T')[0];
+
 let toastTimeout;
 
 getToken();
@@ -54,8 +58,13 @@ async function saveSet() {
         return false;
     }
 
+    if (dateInput.value > todayISO) {
+        showError('Нельзя выбрать дату позже сегодняшней');
+        return false;
+    }
+
     try {
-        await addSet(machineId, weight, reps);
+        await addSet(machineId, weight, reps, dateInput.value);
         hideError();
         return true;
     } catch (error) {
@@ -98,5 +107,32 @@ async function loadMachine() {
         console.error(error);
     }
 }
+
+function formatDateDisplay(dateString) {
+    if (dateString === todayISO) {
+        return 'Сегодня, ' + formatDate(dateString);
+    }
+    return formatDate(dateString);
+}
+
+dateInput.addEventListener('change', function() {
+    if (dateInput.value) {
+        dateDisplay.textContent = formatDateDisplay(dateInput.value);
+    }
+});
+
+// Клик по обычной (текстовой) части нативного date-инпута просто ставит
+// курсор в сегмент даты — попап-календарь открывает только клик строго по
+// иконке-календарику. Наш инпут растянут на весь блок и скрыт, так что
+// без showPicker() календарь почти нигде не открывался бы кликом.
+dateInput.addEventListener('click', function() {
+    if (typeof dateInput.showPicker === 'function') {
+        dateInput.showPicker();
+    }
+});
+
+dateInput.max = todayISO;
+dateInput.value = todayISO;
+dateDisplay.textContent = formatDateDisplay(todayISO);
 
 loadMachine()
