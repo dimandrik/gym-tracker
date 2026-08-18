@@ -34,8 +34,7 @@ func NewAuthHandler(userRepo *repository.UserRepository, jwtSecret string) *Auth
 	return &AuthHandler{userRepo: userRepo, jwtSecret: jwtSecret}
 }
 
-// Register creates a new user and logs them in immediately by returning a JWT,
-// so the frontend doesn't need a separate call after signup.
+// сразу возвращаем JWT, чтобы фронтенду не нужен был отдельный логин после регистрации
 func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -91,8 +90,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// deliberately same "invalid credentials" error for unknown email and
-	// wrong password below — don't want to leak which emails are registered
+	// одна и та же ошибка для неизвестного email и неверного пароля — чтобы не палить, какие email зарегистрированы
 	user, err := h.userRepo.GetUserByEmail(r.Context(), req.Email)
 	if err != nil {
 		http.Error(w, "invalid credentials", http.StatusUnauthorized)

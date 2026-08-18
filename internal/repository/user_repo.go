@@ -26,7 +26,7 @@ func (r *UserRepository) CreateUser(ctx context.Context, email, passwordHash, fi
 	err := row.Scan(&id)
 	if err != nil {
 		var pgErr *pgconn.PgError
-		// 23505 = unique_violation — relies on a unique constraint on users.email
+		// 23505 = unique_violation, полагается на уникальный constraint на users.email
 		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
 			return "", ErrEmailAlreadyExists
 		}

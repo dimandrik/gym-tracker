@@ -19,14 +19,9 @@ func NewWorkoutRepository(pool *pgxpool.Pool) *WorkoutRepository {
 	return &WorkoutRepository{pool}
 }
 
-// GetOrCreateWorkout returns the user's workout row for the given date,
-// creating one if it doesn't exist yet — this is what lets all sets logged
-// on the same day land in a single workout without the frontend having to
-// track a "current workout" explicitly.
-//
-// Not wrapped in a transaction, so two near-simultaneous first-set-of-the-day
-// requests could in theory both miss the SELECT and both INSERT a duplicate
-// workout row for that date. Not a concern in practice with one client per user.
+// нет обёртки в транзакцию: при почти одновременных первых запросах за день
+// оба могут не найти строку через SELECT и создать дубликат тренировки на эту дату.
+// На практике не проблема, т.к. у пользователя один клиент.
 func (r *WorkoutRepository) GetOrCreateWorkout(ctx context.Context, userID string, date time.Time) (string, error) {
 	var id string
 	err := r.pool.QueryRow(ctx,
@@ -51,8 +46,6 @@ func (r *WorkoutRepository) GetOrCreateWorkout(ctx context.Context, userID strin
 	return id, nil
 }
 
-// GetWorkoutHistory returns one row per workout day with counts of distinct
-// machines used and total sets logged — powers the history screen list.
 func (r *WorkoutRepository) GetWorkoutHistory(ctx context.Context, userID string) ([]models.WorkoutSummary, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT

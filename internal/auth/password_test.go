@@ -33,7 +33,7 @@ func TestHashPassword_DifferentHashesForSamePassword(t *testing.T) {
 }
 
 func TestHashPassword_TooLong(t *testing.T) {
-	// bcrypt rejects passwords longer than 72 bytes.
+	// bcrypt отклоняет пароли длиннее 72 байт
 	longPassword := make([]byte, 73)
 	for i := range longPassword {
 		longPassword[i] = 'a'

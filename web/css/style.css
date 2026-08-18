@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
-/* ===== Базовый сброс ===== */
 * {
     box-sizing: border-box;
 }
@@ -18,7 +17,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ===== Экран авторизации ===== */
 .auth-screen {
     min-height: 100vh;
     display: flex;
@@ -29,7 +27,6 @@ body {
     margin: 0 auto;
 }
 
-/* ===== Логотип ===== */
 .auth-logo {
     width: 52px;
     height: 52px;
@@ -48,7 +45,6 @@ body {
     border-radius: 5px;
 }
 
-/* ===== Заголовок ===== */
 .auth-header {
     margin-bottom: 38px;
 }
@@ -68,7 +64,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ===== Форма ===== */
 .form-field {
     margin-bottom: 18px;
 }
@@ -122,7 +117,6 @@ body {
     font-size: 14px;
 }
 
-/* ===== Кнопка ===== */
 .btn {
     width: 100%;
     height: 58px;
@@ -145,7 +139,6 @@ body {
     background: var(--accent-hover);
 }
 
-/* ===== Переключатель входа / регистрации ===== */
 .auth-switch {
     margin: 22px 0 0;
     text-align: center;
@@ -163,7 +156,6 @@ body {
     color: var(--accent-hover);
 }
 
-/* ===== Список тренажёров ===== */
 .machines-screen {
     min-height: 100vh;
     padding: 34px var(--screen-padding) 100px;
@@ -231,7 +223,6 @@ body {
     text-decoration: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-/* ===== Нижний таб-бар ===== */
 .tab-bar {
     position: fixed;
     bottom: 0;
@@ -258,7 +249,6 @@ body {
     color: var(--accent);
 }
 
-/* ===== Экран добавления тренажёра ===== */
 .add-machine-screen {
     min-height: 100vh;
     padding: 34px var(--screen-padding) 48px;
@@ -295,7 +285,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ===== Экран карточки тренажёра ===== */
 .machine-screen {
     min-height: 100vh;
     padding: 0 0 120px;
@@ -353,6 +342,24 @@ body {
     position: absolute;
     top: 20px;
     right: var(--screen-padding);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(20, 17, 13, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.machine-hero__chart-link {
+    position: absolute;
+    top: 20px;
+    right: calc(var(--screen-padding) + 48px);
     width: 40px;
     height: 40px;
     border-radius: 12px;
@@ -484,7 +491,6 @@ body {
     cursor: pointer;
 }
 
-/* ===== Список истории по дням ===== */
 .history-list {
     padding: 12px var(--screen-padding) 0;
 }
@@ -541,7 +547,6 @@ body {
     font-weight: 500;
 }
 
-/* ===== Подтверждение удаления подхода ===== */
 .confirm-modal {
     position: fixed;
     inset: 0;
@@ -625,7 +630,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* ===== Удаление аккаунта (12A2) ===== */
 .confirm-modal__sheet .form-field {
     text-align: left;
 }
@@ -637,7 +641,6 @@ body {
     letter-spacing: 3px;
 }
 
-/* ===== Экран добавления подхода ===== */
 .add-set-screen {
     min-height: 100vh;
     padding: 34px var(--screen-padding) 48px;
@@ -699,7 +702,7 @@ body {
     font-size: 38px;
     line-height: 1;
     color: var(--text-primary);
-    -moz-appearance: textfield;
+    -moz-appearance: textfield; /* убирает нативные стрелки number-инпута, т.к. есть свои кнопки +/- */
 }
 
 .stepper__value::-webkit-outer-spin-button,
@@ -852,7 +855,6 @@ body {
     background: rgba(229, 72, 77, 0.08);
 }
 
-/* ===== История тренировок ===== */
 .workout-history {
     display: flex;
     flex-direction: column;
@@ -895,7 +897,6 @@ body {
     color: var(--text-muted);
 }
 
-/* ===== экран изменения тренажера ===== */
 
 .photo-picker__overlay {
     position: absolute;
@@ -919,7 +920,6 @@ body {
     margin-top: 12px;
 }
 
-/* ===== Экран настроек ===== */
 .settings-screen {
     min-height: 100vh;
     padding: 34px var(--screen-padding) 48px;
@@ -1006,7 +1006,6 @@ body {
     margin-top: 8px;
 }
 
-/* ===== Аккаунт и безопасность ===== */
 .settings-row--editable {
     align-items: center;
     margin-bottom: 12px;
@@ -1064,7 +1063,6 @@ body {
     background: rgba(229, 72, 77, 0.08);
 }
 
-/* ===== Детали дня из истории ===== */
 .day-screen {
     min-height: 100vh;
     max-width: 480px;
@@ -1140,4 +1138,267 @@ body {
 .day-machine-block .history-set:last-child {
     border-bottom-left-radius: var(--radius-input);
     border-bottom-right-radius: var(--radius-input);
+}
+
+.chart-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 14px 0 4px;
+}
+
+.chart-tab {
+    flex: 1;
+    height: 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.chart-tab--active {
+    background: var(--accent);
+    border: none;
+    font-weight: 600;
+    color: var(--on-accent);
+}
+
+.chart-range-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 0 4px;
+    overflow-x: auto;
+}
+
+.chart-range-tab {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chart-range-tab--active {
+    background: var(--bg-surface);
+    border: 1.5px solid var(--accent);
+    font-weight: 600;
+    color: var(--accent);
+    box-shadow: 0 0 8px rgba(46, 203, 255, 0.35);
+}
+
+.chart-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 16px 14px 12px;
+    margin-bottom: 16px;
+}
+
+.chart-card__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.chart-card__title + .history-day {
+    margin-top: 12px;
+}
+
+.chart-card__desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 4px 0 10px;
+}
+
+.chart-card__empty {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.chart-card svg {
+    display: block;
+    margin: 0 auto;
+}
+
+.chart-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.chart-legend__gradient {
+    flex: 1;
+    max-width: 120px;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, rgb(59, 111, 224), rgb(229, 72, 77));
+}
+
+.chart-point {
+    cursor: pointer;
+    transition: stroke-width 0.2s ease, filter 0.2s ease;
+}
+
+.chart-point--highlighted {
+    stroke: var(--accent);
+    stroke-width: 3;
+    filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.chart-point-modal__list {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    text-align: left;
+}
+
+.chart-point-modal__list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.chart-point-modal__list li:last-child {
+    border-bottom: none;
+}
+
+.chart-point-modal__list li span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-point-modal__list li span:last-child {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.chart-point-modal__title {
+    color: var(--accent);
+}
+
+.chart-point-modal__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.chart-card__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.chart-card__badge {
+    font-family: var(--font-mono), monospace;
+    font-size: 13px;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.chart-section-label {
+    margin: 0 4px 8px;
+    font-family: var(--font-mono), monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.chart-records {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-btn);
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.chart-record {
+    display: flex;
+    align-items: center;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px;
+}
+
+.chart-record:last-child {
+    border-bottom: none;
+}
+
+.chart-record__date,
+.chart-record__label {
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.chart-record__weight {
+    font-family: var(--font-mono), monospace;
+    color: var(--text-primary);
+}
+
+.chart-record__count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-right: 14px;
+}
+
+.chart-record__delta {
+    font-family: var(--font-mono), monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 44px;
+    text-align: right;
+}
+
+.chart-record__delta--positive {
+    color: var(--accent);
+}
+
+.chart-record__weight--accent {
+    color: var(--accent);
+}
+
+.chart-record__weight--muted {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.chart-bar-legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 4px 0;
+    margin-top: 6px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.chart-bar-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.chart-bar-legend__swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
 }

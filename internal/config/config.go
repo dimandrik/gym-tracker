@@ -13,8 +13,7 @@ type Config struct {
 	JWTSecret   string
 }
 
-// Load reads config from .env (if present) and the real environment,
-// the latter always wins so this works both locally and in prod/docker.
+// значения из окружения имеют приоритет над .env — работает и локально, и в проде/докере
 func Load() Config {
 	if err := godotenv.Load(); err != nil {
 		log.Println("no .env file found, relying on real environment variables")
@@ -28,8 +27,7 @@ func Load() Config {
 		cfg.Port = "8080"
 	}
 
-	// DB and JWT secret are required — better to fail fast on startup
-	// than to hit a nil pool or an empty signing key mid-request
+	// падаем сразу при старте, а не посреди запроса с nil-пулом или пустым ключом
 	if cfg.DatabaseURL == "" {
 		log.Fatal("DATABASE_URL is not set")
 	}

@@ -31,9 +31,6 @@ func (r *SetRepository) CreateSet(ctx context.Context, workoutItemID string, set
 	return id, nil
 }
 
-// GetSetsByMachineID walks sets -> workout_items -> machines/workouts to
-// flatten everything into one row per set, newest workout first. Used for
-// the per-machine history screen and for computing the personal record.
 func (r *SetRepository) GetSetsByMachineID(ctx context.Context, machineID string) ([]models.SetHistoryEntry, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT sets.id, machines.name, workouts.workout_date, sets.set_number, sets.weight_kg, sets.reps
@@ -64,9 +61,7 @@ func (r *SetRepository) GetSetsByMachineID(ctx context.Context, machineID string
 	return sets, nil
 }
 
-// DeleteSet removes a set and shifts the set_number of every later set in
-// the same workout_item down by one, so numbering stays contiguous from 1
-// instead of leaving a gap where the deleted set used to be.
+// после удаления сдвигает set_number последующих подходов на 1 назад, чтобы нумерация оставалась без разрывов
 func (r *SetRepository) DeleteSet(ctx context.Context, setID, userID string) error {
 	tx, err := r.pool.Begin(ctx)
 	if err != nil {
@@ -126,10 +121,8 @@ func (r *SetRepository) UpdateSet(ctx context.Context, setID, userID string, wei
 	return nil
 }
 
-// GetNextSetNumber just counts existing sets + 1 rather than tracking a
-// counter — simple, but two concurrent AddSet calls for the same machine
-// could both compute the same number. Not an issue with a single user
-// logging sets from one device.
+// номер = количество подходов + 1, без отдельного счётчика; при параллельных запросах
+// возможна гонка, но это не проблема при одном устройстве на пользователя
 func (r *SetRepository) GetNextSetNumber(ctx context.Context, workoutItemID string) (int, error) {
 	var count int
 	err := r.pool.QueryRow(ctx,

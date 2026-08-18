@@ -12,8 +12,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// GenerateToken issues a token valid for 3 days — no refresh flow yet,
-// so users just have to log in again after it expires.
+// токен живёт 3 дня, refresh-флоу пока нет — после истечения нужен повторный логин
 func GenerateToken(userID string, secret string) (string, error) {
 	claims := Claims{
 		UserID: userID,

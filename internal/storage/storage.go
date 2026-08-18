@@ -10,9 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// SaveFile writes an uploaded file to uploadDir under a random UUID name
-// (keeps the original extension, drops the original filename to avoid
-// collisions and path traversal) and returns the public URL to serve it from.
+// имя файла — случайный UUID с исходным расширением, оригинальное имя отбрасывается
+// во избежание коллизий и path traversal
 func SaveFile(file multipart.File, header *multipart.FileHeader, uploadDir string) (string, error) {
 	ext := filepath.Ext(header.Filename)
 	filename := uuid.New().String() + ext

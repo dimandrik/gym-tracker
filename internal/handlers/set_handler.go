@@ -30,9 +30,8 @@ type UpdateSetRequest struct {
 	Reps     int     `json:"reps"`
 }
 
-// AddSet is the core write path: every set gets attached to "today's" workout,
-// creating the workout and the workout-machine item on the fly if this is the
-// first set logged for that machine today. Set numbers reset per machine per day.
+// подход создаёт тренировку и её элемент "на лету", если это первый подход по машине за день;
+// нумерация подходов сбрасывается для каждой машины каждый день
 func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 

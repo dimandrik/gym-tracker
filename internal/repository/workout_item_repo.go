@@ -17,9 +17,7 @@ func NewWorkoutItemRepository(pool *pgxpool.Pool) *WorkoutItemRepository {
 	return &WorkoutItemRepository{pool}
 }
 
-// GetOrCreateWorkoutItem returns the row linking a workout to a machine
-// (one per machine per workout), creating it the first time that machine
-// is used within the workout. Same race caveat as GetOrCreateWorkout.
+// одна запись на пару "тренировка-машина"; та же гонка при конкурентных запросах, что и в GetOrCreateWorkout
 func (r *WorkoutItemRepository) GetOrCreateWorkoutItem(ctx context.Context, workoutID, machineID string) (string, error) {
 	var id string
 	err := r.pool.QueryRow(ctx,

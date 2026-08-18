@@ -11,8 +11,7 @@ type contextKey string
 
 const UserIDKey contextKey = "userID"
 
-// AuthMiddleware checks the "Authorization: Bearer <token>" header and, if valid,
-// stashes the user ID in the request context under UserIDKey for handlers to read.
+// кладёт userID в контекст запроса под UserIDKey для последующих хендлеров
 func AuthMiddleware(secret string) func(http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {

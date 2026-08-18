@@ -10,8 +10,7 @@ type Set struct {
 	Reps          int     `json:"reps"`
 }
 
-// SetHistoryEntry is a denormalized view of a set joined with its machine
-// and workout date — what the history endpoints return, as opposed to Set.
+// денормализованное представление подхода с данными машины и датой тренировки — для эндпоинтов истории
 type SetHistoryEntry struct {
 	ID          string    `json:"id"`
 	MachineName string    `json:"machine_name"`

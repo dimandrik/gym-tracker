@@ -20,8 +20,7 @@ func main() {
 	defer pool.Close()
 	log.Println("connected to database")
 
-	// repositories talk to postgres, handlers talk to repositories — kept as
-	// separate layers so handlers stay free of SQL
+	// репозитории отделены от хендлеров, чтобы SQL не проникал в хендлеры
 	userRepo := repository.NewUserRepository(pool)
 	machineRepo := repository.NewMachineRepository(pool)
 	workoutRepo := repository.NewWorkoutRepository(pool)

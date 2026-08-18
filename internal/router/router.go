@@ -16,11 +16,10 @@ func New(
 ) http.Handler {
 	mux := http.NewServeMux()
 
-	// register/login are the only routes that don't require a token yet
+	// регистрация и логин — единственные маршруты без токена
 	mux.HandleFunc("POST /api/register", authHandler.Register)
 	mux.HandleFunc("POST /api/login", authHandler.Login)
 
-	// everything below reads the user from the JWT, so it goes through authMiddleware
 	authMiddleware := middleware.AuthMiddleware(jwtSecret)
 	mux.HandleFunc("POST /api/machines", authMiddleware(machineHandler.CreateMachine))
 	mux.HandleFunc("GET /api/machines", authMiddleware(machineHandler.GetMachines))
@@ -40,7 +39,6 @@ func New(
 	mux.HandleFunc("PUT /api/user/password", authMiddleware(userHandler.UpdatePassword))
 	mux.HandleFunc("DELETE /api/user/account", authMiddleware(userHandler.DeleteAccount))
 
-	// serves uploaded machine photos directly from disk
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("uploads"))))
 
 	return middleware.CORS(mux)

@@ -1,10 +1,9 @@
-getToken(); // редиректит на login.html, если пользователь не залогинен
+getToken();
 
 async function getMachines() {
     return apiFetch('/api/machines');
 }
 
-// собирает DOM-карточку тренажёра для сетки на главном экране
 function createMachineCard(machine) {
     const card = document.createElement('a');
     card.className = 'machine-card';
@@ -38,4 +37,4 @@ async function loadMachines() {
     }
 }
 
-loadMachines(); // запускаем загрузку сразу при открытии страницы
+loadMachines();

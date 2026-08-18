@@ -17,12 +17,11 @@ func NewMachineHandler(machineRepo *repository.MachineRepository, uploadDir stri
 	return &MachineHandler{machineRepo: machineRepo, uploadDir: uploadDir}
 }
 
-// CreateMachine expects a multipart form (name + photo) rather than JSON,
-// since it has to accept a file upload.
+// принимает multipart-форму, а не JSON, т.к. нужно загрузить файл
 func (h *MachineHandler) CreateMachine(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 
-	if err := r.ParseMultipartForm(10 << 20); err != nil { // 10 MB max upload size
+	if err := r.ParseMultipartForm(10 << 20); err != nil { // лимит 10 МБ
 		http.Error(w, "invalid form data", http.StatusBadRequest)
 		return
 	}
@@ -69,9 +68,7 @@ func (h *MachineHandler) GetMachines(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(machines)
 }
 
-// GetMachine returns a machine by ID. Note: it doesn't check that the
-// machine belongs to the requesting user — fine while machines aren't
-// shared between accounts, revisit if that changes.
+// не проверяет принадлежность машины пользователю — норм, пока машины не шарятся между аккаунтами
 func (h *MachineHandler) GetMachine(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 

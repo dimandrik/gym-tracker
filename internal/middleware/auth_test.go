@@ -170,10 +170,8 @@ func TestAuthMiddleware_WrongAuthScheme(t *testing.T) {
 	}
 }
 
-// TrimPrefix is a no-op when the prefix is absent, so a bare token
-// (no "Bearer " prefix at all) is still accepted as-is by the current
-// implementation. This test documents that behavior rather than an
-// intended security boundary.
+// TrimPrefix ничего не делает, если префикса нет — токен без "Bearer " тоже пройдёт;
+// это не задуманная защита, а фиксация текущего поведения
 func TestAuthMiddleware_TokenWithoutBearerPrefixStillValidates(t *testing.T) {
 	token, err := auth.GenerateToken("user-123", testSecret)
 	if err != nil {

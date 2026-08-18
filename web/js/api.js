@@ -25,7 +25,7 @@ async function apiFetch(path, options) {
         throw error;
     }
 
-    // DELETE/PUT respond 204 No Content — no body to parse
+    // DELETE/PUT отвечают 204 без тела — парсить нечего
     if (response.status === 204) {
         return null;
     }
