@@ -33,7 +33,7 @@ func (r *MachineRepository) GetMachinesByUserID(ctx context.Context, userID stri
 	}
 	defer rows.Close()
 
-	var machines []models.Machine
+	machines := []models.Machine{}
 	for rows.Next() {
 		var m models.Machine
 		if err := rows.Scan(&m.ID, &m.UserID, &m.Name, &m.PhotoURL, &m.CreatedAt); err != nil {

@@ -4,7 +4,7 @@ import "net/http"
 
 var allowedOrigins = map[string]bool{
 	"http://localhost:8081":      true,
-	"http://192.168.10.195:8081": true,
+	"http://192.168.0.118:8081":  true,
 }
 
 func CORS(next http.Handler) http.Handler {

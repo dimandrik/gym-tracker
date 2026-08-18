@@ -28,6 +28,12 @@ async function loadMachines() {
     const grid = document.querySelector('#machines-grid');
     try {
         const machines = await getMachines();
+
+        if (machines.length === 0) {
+            grid.textContent = "У вас пока нет тренажёров — добавьте первый!"
+            return;
+        }
+
         machines.forEach(function(machine) {
             const card = createMachineCard(machine);
             grid.appendChild(card);
