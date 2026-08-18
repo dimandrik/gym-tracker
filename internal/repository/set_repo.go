@@ -31,16 +31,16 @@ func (r *SetRepository) CreateSet(ctx context.Context, workoutItemID string, set
 	return id, nil
 }
 
-func (r *SetRepository) GetSetsByMachineID(ctx context.Context, machineID string) ([]models.SetHistoryEntry, error) {
+func (r *SetRepository) GetSetsByMachineID(ctx context.Context, machineID, userID string) ([]models.SetHistoryEntry, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT sets.id, machines.name, workouts.workout_date, sets.set_number, sets.weight_kg, sets.reps
 		FROM sets
 		JOIN workout_items ON sets.workout_item_id = workout_items.id
 		JOIN machines ON workout_items.machine_id = machines.id
 		JOIN workouts ON workout_items.workout_id = workouts.id
-		WHERE machines.id = $1
+		WHERE machines.id = $1 AND machines.user_id = $2
 		ORDER BY workouts.workout_date DESC, sets.set_number
-	`, machineID)
+	`, machineID, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get sets by machine ID: %w", err)
 	}

@@ -68,13 +68,13 @@ func (h *MachineHandler) GetMachines(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(machines)
 }
 
-// не проверяет принадлежность машины пользователю — норм, пока машины не шарятся между аккаунтами
 func (h *MachineHandler) GetMachine(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	id := r.PathValue("id")
 
-	machine, err := h.machineRepo.GetMachineByID(r.Context(), id)
+	machine, err := h.machineRepo.GetMachineByID(r.Context(), id, userID)
 	if err != nil {
-		http.Error(w, "failed to get machine", http.StatusInternalServerError)
+		http.Error(w, "machine not found", http.StatusNotFound)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -86,7 +86,7 @@ func (h *MachineHandler) DeleteMachine(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	machineID := r.PathValue("id")
 
-	machine, err := h.machineRepo.GetMachineByID(r.Context(), machineID)
+	machine, err := h.machineRepo.GetMachineByID(r.Context(), machineID, userID)
 	if err != nil {
 		http.Error(w, "machine not found", http.StatusNotFound)
 		return
@@ -117,7 +117,7 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	existingMachine, err := h.machineRepo.GetMachineByID(r.Context(), machineID)
+	existingMachine, err := h.machineRepo.GetMachineByID(r.Context(), machineID, userID)
 	if err != nil {
 		http.Error(w, "machine not found", http.StatusNotFound)
 		return

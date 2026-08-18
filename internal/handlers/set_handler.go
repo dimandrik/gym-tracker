@@ -12,10 +12,11 @@ type SetHandler struct {
 	workoutRepo     *repository.WorkoutRepository
 	workoutItemRepo *repository.WorkoutItemRepository
 	setRepo         *repository.SetRepository
+	machineRepo     *repository.MachineRepository
 }
 
-func NewSetHandler(workoutRepo *repository.WorkoutRepository, workoutItemRepo *repository.WorkoutItemRepository, setRepo *repository.SetRepository) *SetHandler {
-	return &SetHandler{workoutRepo: workoutRepo, workoutItemRepo: workoutItemRepo, setRepo: setRepo}
+func NewSetHandler(workoutRepo *repository.WorkoutRepository, workoutItemRepo *repository.WorkoutItemRepository, setRepo *repository.SetRepository, machineRepo *repository.MachineRepository) *SetHandler {
+	return &SetHandler{workoutRepo: workoutRepo, workoutItemRepo: workoutItemRepo, setRepo: setRepo, machineRepo: machineRepo}
 }
 
 type AddSetRequest struct {
@@ -51,6 +52,11 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 		today = parsedDate
 	}
 
+	if _, err := h.machineRepo.GetMachineByID(r.Context(), req.MachineID, userID); err != nil {
+		http.Error(w, "machine not found", http.StatusNotFound)
+		return
+	}
+
 	workoutID, err := h.workoutRepo.GetOrCreateWorkout(r.Context(), userID, today)
 	if err != nil {
 		http.Error(w, "failed to get or create workout", http.StatusInternalServerError)
@@ -81,12 +87,13 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SetHandler) GetSetsByMachine(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
 	machineID := r.URL.Query().Get("machine_id")
 	if machineID == "" {
 		http.Error(w, "machine_id is required", http.StatusBadRequest)
 		return
 	}
-	sets, err := h.setRepo.GetSetsByMachineID(r.Context(), machineID)
+	sets, err := h.setRepo.GetSetsByMachineID(r.Context(), machineID, userID)
 	if err != nil {
 		http.Error(w, "failed to get sets", http.StatusInternalServerError)
 		return

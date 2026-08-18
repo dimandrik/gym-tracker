@@ -49,9 +49,8 @@ func (r *MachineRepository) GetMachinesByUserID(ctx context.Context, userID stri
 	return machines, nil
 }
 
-func (r *MachineRepository) GetMachineByID(ctx context.Context, id string) (*models.Machine, error) {
-	row := r.pool.QueryRow(ctx, "SELECT id, user_id, name, photo_url, created_at FROM machines WHERE id = $1", id)
-
+func (r *MachineRepository) GetMachineByID(ctx context.Context, id, userID string) (*models.Machine, error) {
+	row := r.pool.QueryRow(ctx, "SELECT id, user_id, name, photo_url, created_at FROM machines WHERE id = $1 AND user_id = $2", id, userID)
 	var m models.Machine
 	err := row.Scan(&m.ID, &m.UserID, &m.Name, &m.PhotoURL, &m.CreatedAt)
 	if err != nil {

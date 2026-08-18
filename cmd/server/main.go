@@ -29,7 +29,7 @@ func main() {
 
 	authHandler := handlers.NewAuthHandler(userRepo, cfg.JWTSecret)
 	machineHandler := handlers.NewMachineHandler(machineRepo, "uploads")
-	setHandler := handlers.NewSetHandler(workoutRepo, workoutItemRepo, setRepo)
+	setHandler := handlers.NewSetHandler(workoutRepo, workoutItemRepo, setRepo, machineRepo)
 	workoutHandler := handlers.NewWorkoutHandler(workoutRepo)
 	userHandler := handlers.NewUserHandler(userRepo)
 
