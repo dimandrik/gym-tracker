@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -28,4 +29,18 @@ func SaveFile(file multipart.File, header *multipart.FileHeader, uploadDir strin
 	}
 
 	return "/uploads/" + filename, nil
+}
+
+func DeleteFile(photoURL, uploadDir string) error {
+	if photoURL == "" {
+		return nil
+	}
+
+	filename := strings.TrimPrefix(photoURL, "/uploads/")
+	fullPath := filepath.Join(uploadDir, filename)
+	if err := os.Remove(fullPath); err != nil {
+		return fmt.Errorf("failed to delete file: %w", err)
+	}
+
+	return nil
 }

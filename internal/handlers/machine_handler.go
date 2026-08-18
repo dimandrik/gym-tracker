@@ -86,11 +86,19 @@ func (h *MachineHandler) DeleteMachine(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	machineID := r.PathValue("id")
 
-	err := h.machineRepo.DeleteMachine(r.Context(), machineID, userID)
+	machine, err := h.machineRepo.GetMachineByID(r.Context(), machineID)
 	if err != nil {
 		http.Error(w, "machine not found", http.StatusNotFound)
 		return
 	}
+
+	err = h.machineRepo.DeleteMachine(r.Context(), machineID, userID)
+	if err != nil {
+		http.Error(w, "machine not found", http.StatusNotFound)
+		return
+	}
+
+	storage.DeleteFile(machine.PhotoURL, h.uploadDir)
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -120,11 +128,14 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 	file, header, err := r.FormFile("photo")
 	if err == nil {
 		defer file.Close()
-		photoURL, err = storage.SaveFile(file, header, h.uploadDir)
+		newPhotoURL, err := storage.SaveFile(file, header, h.uploadDir)
 		if err != nil {
 			http.Error(w, "failed to save photo", http.StatusInternalServerError)
 			return
 		}
+		oldPhotoURL := photoURL
+		photoURL = newPhotoURL
+		defer storage.DeleteFile(oldPhotoURL, h.uploadDir)
 	}
 
 	if err := h.machineRepo.UpdateMachine(r.Context(), machineID, userID, name, photoURL); err != nil {
