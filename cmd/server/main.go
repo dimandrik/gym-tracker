@@ -1,8 +1,14 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"gym_tracker/internal/config"
 	"gym_tracker/internal/db"
@@ -35,8 +41,30 @@ func main() {
 
 	mux := router.New(authHandler, machineHandler, setHandler, workoutHandler, userHandler, cfg.JWTSecret)
 
-	log.Printf("starting server on port %s", cfg.Port)
-	if err := http.ListenAndServe(":"+cfg.Port, mux); err != nil {
-		log.Fatal(err)
+	server := &http.Server{
+		Addr:    ":" + cfg.Port,
+		Handler: mux,
 	}
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		log.Printf("starting server on port %s", cfg.Port)
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatal(err)
+		}
+	}()
+
+	<-quit
+	log.Println("shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Printf("forced shutdown: %v", err)
+	}
+
+	log.Println("server stopped")
 }
