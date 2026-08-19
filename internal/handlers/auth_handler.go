@@ -57,7 +57,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	hash, err := auth.HashPassword(req.Password)
 	if err != nil {
-		http.Error(w, "failed to hash password", http.StatusInternalServerError)
+		serverError(w, err, "failed to hash password")
 		return
 	}
 
@@ -67,13 +67,13 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "email already exists", http.StatusConflict)
 			return
 		}
-		http.Error(w, "failed to create user", http.StatusInternalServerError)
+		serverError(w, err, "failed to create user")
 		return
 	}
 
 	token, err := auth.GenerateToken(userID, h.jwtSecret)
 	if err != nil {
-		http.Error(w, "failed to generate token", http.StatusInternalServerError)
+		serverError(w, err, "failed to generate token")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -104,9 +104,8 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := auth.GenerateToken(user.ID, h.jwtSecret)
 	if err != nil {
-		http.Error(w, "failed to generate token", http.StatusInternalServerError)
+		serverError(w, err, "failed to generate token")
 		return
-
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -41,13 +41,13 @@ func (h *MachineHandler) CreateMachine(w http.ResponseWriter, r *http.Request) {
 
 	photoURL, err := storage.SaveFile(file, header, h.uploadDir)
 	if err != nil {
-		http.Error(w, "failed to save photo", http.StatusInternalServerError)
+		serverError(w, err, "failed to save photo")
 		return
 	}
 
 	id, err := h.machineRepo.CreateMachine(r.Context(), userID, name, photoURL)
 	if err != nil {
-		http.Error(w, "failed to create machine", http.StatusInternalServerError)
+		serverError(w, err, "failed to create machine")
 		return
 	}
 
@@ -60,7 +60,7 @@ func (h *MachineHandler) GetMachines(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	machines, err := h.machineRepo.GetMachinesByUserID(r.Context(), userID)
 	if err != nil {
-		http.Error(w, "failed to get machines", http.StatusInternalServerError)
+		serverError(w, err, "failed to get machines")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -130,7 +130,7 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 		defer file.Close()
 		newPhotoURL, err := storage.SaveFile(file, header, h.uploadDir)
 		if err != nil {
-			http.Error(w, "failed to save photo", http.StatusInternalServerError)
+			serverError(w, err, "failed to save photo")
 			return
 		}
 		oldPhotoURL := photoURL
@@ -139,7 +139,7 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.machineRepo.UpdateMachine(r.Context(), machineID, userID, name, photoURL); err != nil {
-		http.Error(w, "failed to update machine", http.StatusInternalServerError)
+		serverError(w, err, "failed to update machine")
 		return
 	}
 

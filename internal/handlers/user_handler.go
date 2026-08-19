@@ -74,7 +74,7 @@ func (h *UserHandler) UpdateName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.userRepo.UpdateName(r.Context(), userID, req.FirstName, req.LastName); err != nil {
-		http.Error(w, "failed to update name", http.StatusInternalServerError)
+		serverError(w, err, "failed to update name")
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -110,7 +110,7 @@ func (h *UserHandler) UpdateEmail(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "email already exists", http.StatusConflict)
 			return
 		}
-		http.Error(w, "failed to update email", http.StatusInternalServerError)
+		serverError(w, err, "failed to update email")
 		return
 	}
 
@@ -146,11 +146,11 @@ func (h *UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	}
 	newHash, err := auth.HashPassword(req.NewPassword)
 	if err != nil {
-		http.Error(w, "failed to hash password", http.StatusInternalServerError)
+		serverError(w, err, "failed to hash password")
 		return
 	}
 	if err := h.userRepo.UpdatePassword(r.Context(), userID, newHash); err != nil {
-		http.Error(w, "failed to update password", http.StatusInternalServerError)
+		serverError(w, err, "failed to update password")
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -177,7 +177,7 @@ func (h *UserHandler) DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.userRepo.DeleteUser(r.Context(), userID); err != nil {
-		http.Error(w, "failed to delete account", http.StatusInternalServerError)
+		serverError(w, err, "failed to delete account")
 		return
 	}
 

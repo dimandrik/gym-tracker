@@ -19,7 +19,7 @@ func (h *WorkoutHandler) GetHistory(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 	workouts, err := h.workoutRepo.GetWorkoutHistory(r.Context(), userID)
 	if err != nil {
-		http.Error(w, "failed to get workout history", http.StatusInternalServerError)
+		serverError(w, err, "failed to get workout history")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")

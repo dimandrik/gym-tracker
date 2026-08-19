@@ -59,25 +59,25 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 
 	workoutID, err := h.workoutRepo.GetOrCreateWorkout(r.Context(), userID, today)
 	if err != nil {
-		http.Error(w, "failed to get or create workout", http.StatusInternalServerError)
+		serverError(w, err, "failed to get or create workout")
 		return
 	}
 
 	itemID, err := h.workoutItemRepo.GetOrCreateWorkoutItem(r.Context(), workoutID, req.MachineID)
 	if err != nil {
-		http.Error(w, "failed to get or create workout item", http.StatusInternalServerError)
+		serverError(w, err, "failed to get or create workout item")
 		return
 	}
 
 	setNumber, err := h.setRepo.GetNextSetNumber(r.Context(), itemID)
 	if err != nil {
-		http.Error(w, "failed to get set number", http.StatusInternalServerError)
+		serverError(w, err, "failed to get set number")
 		return
 	}
 
 	setID, err := h.setRepo.CreateSet(r.Context(), itemID, setNumber, req.WeightKg, req.Reps)
 	if err != nil {
-		http.Error(w, "failed to create set", http.StatusInternalServerError)
+		serverError(w, err, "failed to create set")
 		return
 	}
 
@@ -95,7 +95,7 @@ func (h *SetHandler) GetSetsByMachine(w http.ResponseWriter, r *http.Request) {
 	}
 	sets, err := h.setRepo.GetSetsByMachineID(r.Context(), machineID, userID)
 	if err != nil {
-		http.Error(w, "failed to get sets", http.StatusInternalServerError)
+		serverError(w, err, "failed to get sets")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -161,7 +161,7 @@ func (h *SetHandler) GetSetsByDate(w http.ResponseWriter, r *http.Request) {
 
 	sets, err := h.setRepo.GetSetsByDate(r.Context(), UserID, date)
 	if err != nil {
-		http.Error(w, "failed to get sets", http.StatusInternalServerError)
+		serverError(w, err, "failed to get sets")
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
