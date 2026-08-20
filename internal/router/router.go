@@ -4,6 +4,7 @@ import (
 	"gym_tracker/internal/handlers"
 	"gym_tracker/internal/middleware"
 	"net/http"
+	"time"
 )
 
 func New(
@@ -16,9 +17,12 @@ func New(
 ) http.Handler {
 	mux := http.NewServeMux()
 
+	loginLimiter := middleware.NewRateLimiter(5, time.Minute)
+	registerLimiter := middleware.NewRateLimiter(5, time.Minute)
+
 	// регистрация и логин — единственные маршруты без токена
-	mux.HandleFunc("POST /api/register", authHandler.Register)
-	mux.HandleFunc("POST /api/login", authHandler.Login)
+	mux.HandleFunc("POST /api/login", middleware.RateLimitMiddleware(loginLimiter)(authHandler.Login))
+	mux.HandleFunc("POST /api/register", middleware.RateLimitMiddleware(registerLimiter)(authHandler.Register))
 
 	authMiddleware := middleware.AuthMiddleware(jwtSecret)
 	mux.HandleFunc("POST /api/machines", authMiddleware(machineHandler.CreateMachine))
