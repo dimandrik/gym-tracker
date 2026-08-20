@@ -144,6 +144,8 @@ func (h *SetHandler) UpdateSet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// верхние границы — не физический лимит, а защита от мусорных/ошибочных значений
+// (опечатка на порядок, баг на фронте), реальные подходы никогда их не достигают
 func validateSetInput(weightKg float64, reps int) error {
 	if weightKg <= 0 {
 		return errors.New("weight_kg must be greater than 0")

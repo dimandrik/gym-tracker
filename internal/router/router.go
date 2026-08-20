@@ -17,6 +17,8 @@ func New(
 ) http.Handler {
 	mux := http.NewServeMux()
 
+	// лимит только на login/register: это единственные маршруты без токена,
+	// то есть единственные, доступные для перебора анонимно
 	loginLimiter := middleware.NewRateLimiter(5, time.Minute)
 	registerLimiter := middleware.NewRateLimiter(5, time.Minute)
 
