@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,9 +13,26 @@ import (
 	"github.com/google/uuid"
 )
 
+var ErrInvalidFileType = errors.New("invalid file type")
+
+var allowedContentTypes = map[string]bool{
+	"image/jpeg": true,
+	"image/png":  true,
+	"image/gif":  true,
+	"image/webp": true,
+}
+
 // имя файла — случайный UUID с исходным расширением, оригинальное имя отбрасывается
 // во избежание коллизий и path traversal
 func SaveFile(file multipart.File, header *multipart.FileHeader, uploadDir string) (string, error) {
+	contentType, err := detectContentType(file)
+	if err != nil {
+		return "", fmt.Errorf("failed to detect content type: %w", err)
+	}
+	if !allowedContentTypes[contentType] {
+		return "", ErrInvalidFileType
+	}
+
 	ext := filepath.Ext(header.Filename)
 	filename := uuid.New().String() + ext
 	fullPath := filepath.Join(uploadDir, filename)
@@ -43,4 +62,18 @@ func DeleteFile(photoURL, uploadDir string) error {
 	}
 
 	return nil
+}
+
+func detectContentType(file multipart.File) (string, error) {
+	buffer := make([]byte, 512)
+	_, err := file.Read(buffer)
+	if err != nil {
+		return "", err
+	}
+
+	if _, err := file.Seek(0, 0); err != nil {
+		return "", err
+	}
+
+	return http.DetectContentType(buffer), nil
 }

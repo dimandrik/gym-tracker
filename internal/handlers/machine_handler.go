@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"gym_tracker/internal/middleware"
 	"gym_tracker/internal/repository"
 	"gym_tracker/internal/storage"
@@ -41,6 +42,10 @@ func (h *MachineHandler) CreateMachine(w http.ResponseWriter, r *http.Request) {
 
 	photoURL, err := storage.SaveFile(file, header, h.uploadDir)
 	if err != nil {
+		if errors.Is(err, storage.ErrInvalidFileType) {
+			http.Error(w, "invalid file type, only JPEG, PNG, GIF, and WEBP images are allowed", http.StatusBadRequest)
+			return
+		}
 		serverError(w, err, "failed to save photo")
 		return
 	}
@@ -130,6 +135,10 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 		defer file.Close()
 		newPhotoURL, err := storage.SaveFile(file, header, h.uploadDir)
 		if err != nil {
+			if errors.Is(err, storage.ErrInvalidFileType) {
+				http.Error(w, "invalid file type, only JPEG, PNG, GIF, and WEBP images are allowed", http.StatusBadRequest)
+				return
+			}
 			serverError(w, err, "failed to save photo")
 			return
 		}

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"gym_tracker/internal/middleware"
 	"gym_tracker/internal/repository"
 	"net/http"
@@ -39,6 +40,11 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 	var req AddSetRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if err := validateSetInput(req.WeightKg, req.Reps); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -125,12 +131,33 @@ func (h *SetHandler) UpdateSet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := validateSetInput(req.WeightKg, req.Reps); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	err := h.setRepo.UpdateSet(r.Context(), setID, userID, req.WeightKg, req.Reps)
 	if err != nil {
 		http.Error(w, "set not found", http.StatusNotFound)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func validateSetInput(weightKg float64, reps int) error {
+	if weightKg <= 0 {
+		return errors.New("weight_kg must be greater than 0")
+	}
+	if weightKg > 1000 {
+		return errors.New("weight_kg must not exceed 1000")
+	}
+	if reps <= 0 {
+		return errors.New("reps must be greater than 0")
+	}
+	if reps > 1000 {
+		return errors.New("reps must not exceed 1000")
+	}
+	return nil
 }
 
 func (h *SetHandler) GetSet(w http.ResponseWriter, r *http.Request) {
