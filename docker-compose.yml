@@ -12,5 +12,21 @@ services:
     volumes:
       - gym_tracker_data:/var/lib/postgresql/data
 
+  server:
+    build: .
+    container_name: gym_tracker_server
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./uploads:/app/uploads
+
 volumes:
   gym_tracker_data:
