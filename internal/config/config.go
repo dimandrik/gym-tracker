@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	DatabaseURL string
-	Port        string
-	JWTSecret   string
+	DatabaseURL    string
+	Port           string
+	JWTSecret      string
+	AllowedOrigins string
 }
 
 // значения из окружения имеют приоритет над .env — работает и локально, и в проде/докере
@@ -19,9 +20,10 @@ func Load() Config {
 		log.Println("no .env file found, relying on real environment variables")
 	}
 	cfg := Config{
-		DatabaseURL: os.Getenv("DATABASE_URL"),
-		Port:        os.Getenv("PORT"),
-		JWTSecret:   os.Getenv("JWT_SECRET"),
+		DatabaseURL:    os.Getenv("DATABASE_URL"),
+		Port:           os.Getenv("PORT"),
+		JWTSecret:      os.Getenv("JWT_SECRET"),
+		AllowedOrigins: os.Getenv("ALLOWED_ORIGINS"),
 	}
 	if cfg.Port == "" {
 		cfg.Port = "8080"
@@ -33,6 +35,9 @@ func Load() Config {
 	}
 	if cfg.JWTSecret == "" {
 		log.Fatal("JWT_SECRET is not set")
+	}
+	if cfg.AllowedOrigins == "" {
+		log.Fatal("ALLOWED_ORIGINS is not set")
 	}
 
 	return cfg

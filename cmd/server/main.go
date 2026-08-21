@@ -13,6 +13,7 @@ import (
 	"gym_tracker/internal/config"
 	"gym_tracker/internal/db"
 	"gym_tracker/internal/handlers"
+	"gym_tracker/internal/middleware"
 	"gym_tracker/internal/repository"
 	"gym_tracker/internal/router"
 )
@@ -39,7 +40,8 @@ func main() {
 	workoutHandler := handlers.NewWorkoutHandler(workoutRepo)
 	userHandler := handlers.NewUserHandler(userRepo)
 
-	mux := router.New(authHandler, machineHandler, setHandler, workoutHandler, userHandler, cfg.JWTSecret)
+	allowedOrigins := middleware.ParseAllowedOrigins(cfg.AllowedOrigins)
+	mux := router.New(authHandler, machineHandler, setHandler, workoutHandler, userHandler, cfg.JWTSecret, allowedOrigins)
 
 	server := &http.Server{
 		Addr:    ":" + cfg.Port,

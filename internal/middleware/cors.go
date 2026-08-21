@@ -1,13 +1,11 @@
 package middleware
 
-import "net/http"
+import (
+	"net/http"
+	"strings"
+)
 
-var allowedOrigins = map[string]bool{
-	"http://localhost:8081":      true,
-	"http://192.168.0.118:8081":  true,
-}
-
-func CORS(next http.Handler) http.Handler {
+func CORS(allowedOrigins map[string]bool, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
 		if allowedOrigins[origin] {
@@ -24,4 +22,15 @@ func CORS(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func ParseAllowedOrigins(raw string) map[string]bool {
+	origins := make(map[string]bool)
+	for _, origin := range strings.Split(raw, ",") {
+		origin = strings.TrimSpace(origin)
+		if origin != "" {
+			origins[origin] = true
+		}
+	}
+	return origins
 }

@@ -14,6 +14,7 @@ func New(
 	workoutHandler *handlers.WorkoutHandler,
 	userHandler *handlers.UserHandler,
 	jwtSecret string,
+	allowedOrigins map[string]bool,
 ) http.Handler {
 	mux := http.NewServeMux()
 
@@ -51,5 +52,5 @@ func New(
 
 	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("uploads"))))
 
-	return middleware.CORS(mux)
+	return middleware.CORS(allowedOrigins, mux)
 }
