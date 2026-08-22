@@ -25,6 +25,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer pool.Close()
+	if err := db.RunMigrations(cfg.DatabaseURL); err != nil {
+		log.Fatal(err)
+	}
 	log.Println("connected to database")
 
 	// репозитории отделены от хендлеров, чтобы SQL не проникал в хендлеры
