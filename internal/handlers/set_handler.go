@@ -38,7 +38,7 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 
 	var req AddSetRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := decodeJSON(w, r, &req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
@@ -126,7 +126,7 @@ func (h *SetHandler) UpdateSet(w http.ResponseWriter, r *http.Request) {
 	setID := r.PathValue("id")
 
 	var req UpdateSetRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := decodeJSON(w, r, &req); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
