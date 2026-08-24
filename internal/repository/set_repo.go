@@ -67,7 +67,7 @@ func (r *SetRepository) DeleteSet(ctx context.Context, setID, userID string) err
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
+	defer func() { _ = tx.Rollback(ctx) }()
 
 	var workoutItemID string
 	var setNumber int
