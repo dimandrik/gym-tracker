@@ -45,8 +45,8 @@ jobs:
 
       - name: Run migrations
         run: |
-          go run github.com/golang-migrate/migrate/v4/cmd/migrate@latest \
-            -path internal/db/migrations \
+          go install github.com/golang-migrate/migrate/v4/cmd/migrate@v4.19.1
+          migrate -path internal/db/migrations \
             -database "postgres://gym_user:gym_pass@localhost:5432/gym_tracker?sslmode=disable" up
 
       - name: Run tests
