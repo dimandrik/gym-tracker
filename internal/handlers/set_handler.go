@@ -89,7 +89,7 @@ func (h *SetHandler) AddSet(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{"id": setID, "set_number": setNumber})
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{"id": setID, "set_number": setNumber})
 }
 
 func (h *SetHandler) GetSetsByMachine(w http.ResponseWriter, r *http.Request) {
@@ -106,7 +106,7 @@ func (h *SetHandler) GetSetsByMachine(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(sets)
+	_ = json.NewEncoder(w).Encode(sets)
 }
 
 func (h *SetHandler) DeleteSet(w http.ResponseWriter, r *http.Request) {
@@ -172,7 +172,7 @@ func (h *SetHandler) GetSet(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(set)
+	_ = json.NewEncoder(w).Encode(set)
 }
 
 func (h *SetHandler) GetSetsByDate(w http.ResponseWriter, r *http.Request) {
@@ -195,5 +195,5 @@ func (h *SetHandler) GetSetsByDate(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(sets)
+	_ = json.NewEncoder(w).Encode(sets)
 }
