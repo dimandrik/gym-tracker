@@ -53,3 +53,20 @@ jobs:
         run: go test ./...
         env:
           DATABASE_URL: postgres://gym_user:gym_pass@localhost:5432/gym_tracker?sslmode=disable
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/gym-tracker
+            git pull origin main
+            docker compose up -d --build
