@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: gym_user
+          POSTGRES_PASSWORD: gym_pass
+          POSTGRES_DB: gym_tracker
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+      - name: Run migrations
+        run: |
+          go run github.com/golang-migrate/migrate/v4/cmd/migrate@latest \
+            -path internal/db/migrations \
+            -database "postgres://gym_user:gym_pass@localhost:5432/gym_tracker?sslmode=disable" up
+
+      - name: Run tests
+        run: go test ./...
+        env:
+          DATABASE_URL: postgres://gym_user:gym_pass@localhost:5432/gym_tracker?sslmode=disable
