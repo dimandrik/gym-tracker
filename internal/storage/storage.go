@@ -47,7 +47,9 @@ func SaveFile(file multipart.File, header *multipart.FileHeader, uploadDir strin
 	if err != nil {
 		return "", fmt.Errorf("failed to create file: %w", err)
 	}
-	defer dst.Close()
+	defer func() {
+		_ = dst.Close()
+	}()
 
 	if _, err := io.Copy(dst, file); err != nil {
 		return "", fmt.Errorf("failed to save file: %w", err)

@@ -60,7 +60,7 @@ func createTestUser(t *testing.T, pool *pgxpool.Pool) string {
 	}
 
 	t.Cleanup(func() {
-		pool.Exec(context.Background(), "DELETE FROM users WHERE id = $1", userID)
+		_, _ = pool.Exec(context.Background(), "DELETE FROM users WHERE id = $1", userID)
 	})
 
 	return userID

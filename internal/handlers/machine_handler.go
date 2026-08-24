@@ -38,7 +38,9 @@ func (h *MachineHandler) CreateMachine(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "photo is required", http.StatusBadRequest)
 		return
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	photoURL, err := storage.SaveFile(file, header, h.uploadDir)
 	if err != nil {
@@ -58,7 +60,7 @@ func (h *MachineHandler) CreateMachine(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"id": id, "photo_url": photoURL})
+	_ = json.NewEncoder(w).Encode(map[string]string{"id": id, "photo_url": photoURL})
 }
 
 func (h *MachineHandler) GetMachines(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +72,7 @@ func (h *MachineHandler) GetMachines(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(machines)
+	_ = json.NewEncoder(w).Encode(machines)
 }
 
 func (h *MachineHandler) GetMachine(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +86,7 @@ func (h *MachineHandler) GetMachine(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(machine)
+	_ = json.NewEncoder(w).Encode(machine)
 }
 
 func (h *MachineHandler) DeleteMachine(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +105,7 @@ func (h *MachineHandler) DeleteMachine(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	storage.DeleteFile(machine.PhotoURL, h.uploadDir)
+	_ = storage.DeleteFile(machine.PhotoURL, h.uploadDir)
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -132,7 +134,9 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 
 	file, header, err := r.FormFile("photo")
 	if err == nil {
-		defer file.Close()
+		defer func() {
+			_ = file.Close()
+		}()
 		newPhotoURL, err := storage.SaveFile(file, header, h.uploadDir)
 		if err != nil {
 			if errors.Is(err, storage.ErrInvalidFileType) {
@@ -144,7 +148,9 @@ func (h *MachineHandler) UpdateMachine(w http.ResponseWriter, r *http.Request) {
 		}
 		oldPhotoURL := photoURL
 		photoURL = newPhotoURL
-		defer storage.DeleteFile(oldPhotoURL, h.uploadDir)
+		defer func() {
+			_ = storage.DeleteFile(oldPhotoURL, h.uploadDir)
+		}()
 	}
 
 	if err := h.machineRepo.UpdateMachine(r.Context(), machineID, userID, name, photoURL); err != nil {
