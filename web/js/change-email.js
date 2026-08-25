@@ -15,7 +15,7 @@ document.querySelector('#change-email-form').addEventListener('submit', async fu
 
     try {
         await updateEmail(newEmail, currentPassword);
-        window.location.href = 'account-security.html';
+        window.location.href = 'account-security';
     } catch (error) {
         if (error.status === 400) {
             errorEl.textContent = 'Некорректный формат email';

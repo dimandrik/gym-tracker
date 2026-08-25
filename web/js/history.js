@@ -25,7 +25,7 @@ function createDayCard(day) {
 
     const card = document.createElement('a');
     card.className = 'workout-day-card';
-    card.href = 'day.html?date=' + dateOnly;
+    card.href = 'day?date=' + dateOnly;
 
     const body = document.createElement('div');
     body.className = 'workout-day-card__body';

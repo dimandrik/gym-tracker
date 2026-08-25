@@ -29,7 +29,7 @@ document.querySelector('#change-name-form').addEventListener('submit', async fun
 
     try {
         await updateName(firstName, lastName);
-        window.location.href = 'account-security.html';
+        window.location.href = 'account-security';
     } catch (error) {
         if (error.status === 400) {
             errorEl.textContent = 'Введите имя и фамилию';

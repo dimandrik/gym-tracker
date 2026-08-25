@@ -14,7 +14,7 @@ let toastTimeout;
 
 getToken();
 
-backLink.href = 'machine.html?id=' + machineId;
+backLink.href = 'machine?id=' + machineId;
 
 // Кнопки +/- у полей веса и повторов — шаг и минимум берутся из
 // data-атрибутов кнопки/инпута в разметке, а не хардкодятся здесь.
@@ -82,7 +82,7 @@ document.querySelector('#save-and-add-btn').addEventListener('click', async func
 function finish() {
     showToast('Подход записан');
     setTimeout(function() {
-        window.location.href = 'machine.html?id=' + machineId;
+        window.location.href = 'machine?id=' + machineId;
     }, 600);
 }
 

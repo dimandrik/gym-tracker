@@ -50,7 +50,7 @@ document.querySelector('#confirm-delete-account-btn').addEventListener('click', 
     try {
         await deleteAccount(password);
         localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        window.location.href = 'login';
     } catch (error) {
         if (error.status === 401) {
             errorEl.textContent = 'Неверный пароль';

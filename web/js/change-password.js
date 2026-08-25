@@ -29,7 +29,7 @@ document.querySelector('#change-password-form').addEventListener('submit', async
 
     try {
         await updatePassword(currentPassword, newPassword);
-        window.location.href = 'account-security.html';
+        window.location.href = 'account-security';
     } catch (error) {
         if (error.status === 401) {
             errorEl.textContent = 'Неверный текущий пароль';

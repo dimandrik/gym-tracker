@@ -18,7 +18,7 @@ form.addEventListener('submit', async function(event) {
 
     try {
         const machine = await addMachine(name, photoFile);
-        window.location.href = 'index.html';
+        window.location.href = 'index';
     } catch (error) {
         const errorEl = document.querySelector('#error-message');
         errorEl.textContent = error.message;

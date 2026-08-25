@@ -12,7 +12,7 @@ async function loadSet() {
         document.querySelector('#machine-name').textContent = set.machine_name;
         document.querySelector('#weight').value = set.weight_kg;
         document.querySelector('#reps').value = set.reps;
-        document.querySelector('#back-link').href = 'machine.html?id=' + machineId;
+        document.querySelector('#back-link').href = 'machine?id=' + machineId;
 
     } catch (error) {
         console.error(error);
@@ -44,7 +44,7 @@ document.querySelector('#edit-set-form').addEventListener('submit', async functi
 
     try {
         await updateSet(setId, weight, reps);
-        window.location.href = 'machine.html?id=' + machineId;
+        window.location.href = 'machine?id=' + machineId;
     } catch (error) {
         errorEl.textContent = error.message;
         errorEl.style.display = 'block';
@@ -58,7 +58,7 @@ document.querySelector('#delete-btn').addEventListener('click', async function()
 
     try {
         await deleteSet(setId);
-        window.location.href = 'machine.html?id=' + machineId;
+        window.location.href = 'machine?id=' + machineId;
     } catch (error) {
         alert('Не удалось удалить подход: ' + error.message);
     }

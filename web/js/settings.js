@@ -38,5 +38,5 @@ logoutBackdrop.addEventListener('click', closeLogoutModal);
 
 document.querySelector('#confirm-logout-btn').addEventListener('click', function() {
     localStorage.removeItem('token');
-    window.location.href = 'login.html';
+    window.location.href = 'login';
 });

@@ -24,9 +24,9 @@ async function loadMachine() {
         document.querySelector('#machine-photo').src = API_BASE_URL + machine.photo_url;
         document.querySelector('#machine-photo').alt = machine.name;
         document.querySelector('#machine-name').textContent = machine.name;
-        addSetLink.href = 'add-set.html?machine_id=' + machine.id;
-        editMachineLink.href = 'edit-machine.html?id=' + machine.id;
-        chartsLink.href = 'charts.html?machine_id=' + machine.id;
+        addSetLink.href = 'add-set?machine_id=' + machine.id;
+        editMachineLink.href = 'edit-machine?id=' + machine.id;
+        chartsLink.href = 'charts?machine_id=' + machine.id;
 
         const sets = await getSets(machineId);
 
@@ -135,7 +135,7 @@ function createDayBlock(date, sets) {
             if (!isEditMode) {
                 return;
             }
-            window.location.href = 'edit-set.html?id=' + set.id;
+            window.location.href = 'edit-set?id=' + set.id;
         });
 
         setsContainer.appendChild(row);

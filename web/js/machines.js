@@ -7,7 +7,7 @@ async function getMachines() {
 function createMachineCard(machine) {
     const card = document.createElement('a');
     card.className = 'machine-card';
-    card.href = 'machine.html?id=' + machine.id;
+    card.href = 'machine?id=' + machine.id;
 
     const img = document.createElement('img');
     img.className = 'machine-card__photo';
