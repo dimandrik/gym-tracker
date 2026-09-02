@@ -11,6 +11,7 @@ const dateDisplay = document.querySelector('#date-display');
 const todayISO = new Date().toISOString().split('T')[0];
 
 let toastTimeout;
+let isSaving = false;
 
 getToken();
 
@@ -50,6 +51,10 @@ function showToast(message) {
 // "готово") и для submit формы — сама показывает ошибку и возвращает
 // true/false, чтобы вызывающий код решал, что делать дальше.
 async function saveSet() {
+    if (isSaving) {
+        return false;
+    }
+
     const weight = parseFloat(weightInput.value);
     const reps = parseInt(repsInput.value, 10);
 
@@ -63,6 +68,7 @@ async function saveSet() {
         return false;
     }
 
+    isSaving = true;
     try {
         await addSet(machineId, weight, reps, dateInput.value);
         hideError();
@@ -70,6 +76,8 @@ async function saveSet() {
     } catch (error) {
         showError(error.message);
         return false;
+    } finally {
+        isSaving = false;
     }
 }
 
