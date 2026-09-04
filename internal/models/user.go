@@ -6,4 +6,5 @@ type User struct {
 	PasswordHash string
 	FirstName    string
 	LastName     string
+	PhotoURL     string
 }

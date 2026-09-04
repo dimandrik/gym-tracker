@@ -11,7 +11,7 @@
 
 <main class="settings-screen">
     <div class="add-set-screen__header">
-        <a href="index" class="add-set-screen__back" aria-label="Назад">
+        <a href="index.html" class="add-set-screen__back" aria-label="Назад">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M15 18l-6-6 6-6"/>
             </svg>
@@ -20,7 +20,10 @@
     </div>
 
     <div class="settings-profile">
-        <div class="settings-avatar" id="settings-avatar"></div>
+        <button type="button" class="settings-avatar" id="settings-avatar" aria-label="Изменить фото профиля">
+            <img class="settings-avatar__photo" id="settings-avatar-photo" alt="" hidden>
+            <span id="settings-avatar-initial"></span>
+        </button>
         <div>
             <p class="settings-profile__name" id="settings-name"></p>
             <p class="settings-profile__email" id="settings-email"></p>
@@ -29,7 +32,7 @@
 
     <div class="settings-section">
         <p class="settings-section__title">Аккаунт</p>
-        <a href="account-security" class="settings-row">
+        <a href="account-security.html" class="settings-row">
             <span>Аккаунт и безопасность</span>
             <span class="settings-row__arrow">›</span>
         </a>
@@ -55,6 +58,31 @@
             <button class="confirm-modal__cancel-btn" id="cancel-logout-btn">Отмена</button>
         </div>
     </div>
+
+    <div class="confirm-modal" id="photo-sheet" hidden>
+        <div class="confirm-modal__backdrop" id="photo-sheet-backdrop"></div>
+        <div class="photo-sheet__sheet">
+            <div class="photo-sheet__header">
+                <div class="settings-avatar photo-sheet__avatar" id="photo-sheet-avatar">
+                    <img class="settings-avatar__photo" id="photo-sheet-avatar-photo" alt="" hidden>
+                    <span id="photo-sheet-avatar-initial"></span>
+                </div>
+                <div>
+                    <p class="photo-sheet__title">Фото профиля</p>
+                    <p class="photo-sheet__name" id="photo-sheet-name"></p>
+                </div>
+            </div>
+
+            <button type="button" class="photo-sheet__option photo-sheet__option--primary" id="photo-take-btn">Сделать снимок</button>
+            <button type="button" class="photo-sheet__option" id="photo-gallery-btn">Выбрать из галереи</button>
+            <button type="button" class="photo-sheet__option photo-sheet__option--danger" id="photo-delete-btn">Удалить фото</button>
+
+            <button type="button" class="photo-sheet__cancel" id="photo-sheet-cancel">Отмена</button>
+        </div>
+    </div>
+
+    <input type="file" accept="image/*" capture="environment" id="photo-camera-input" hidden>
+    <input type="file" accept="image/*" id="photo-gallery-input" hidden>
 
 </main>
 

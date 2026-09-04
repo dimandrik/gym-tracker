@@ -13,7 +13,7 @@ form.addEventListener('submit', async function(event) {
         // токен живёт в localStorage — его же читает getToken() на всех
         // остальных страницах
         localStorage.setItem('token', data.token);
-        window.location.href = 'index';
+        window.location.href = 'index.html';
     } catch (error) {
         console.log('ошибка:', error.message);
         if (error.status === 401) {

@@ -634,6 +634,93 @@ body {
     text-align: left;
 }
 
+.photo-sheet__sheet {
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 420px;
+    margin-bottom: 40px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px 20px 24px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.confirm-modal--visible .photo-sheet__sheet {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.photo-sheet__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.photo-sheet__avatar {
+    cursor: default;
+}
+
+.photo-sheet__title {
+    margin: 0;
+    font-family: var(--font-heading), serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.photo-sheet__name {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.photo-sheet__option {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-body), sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.photo-sheet__option--primary {
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.photo-sheet__option--danger {
+    border-color: var(--error-border);
+    color: var(--error-text);
+    margin-bottom: 4px;
+}
+
+.photo-sheet__cancel {
+    width: 100%;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-body), sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
 .confirm-modal__password-input {
     height: 54px;
     background: var(--bg-primary);
@@ -938,6 +1025,7 @@ body {
     flex-shrink: 0;
     width: 56px;
     height: 56px;
+    padding: 0;
     border-radius: 50%;
     background: var(--bg-surface);
     border: 1px solid var(--border);
@@ -947,6 +1035,14 @@ body {
     font-family: var(--font-heading), serif;
     font-size: 22px;
     color: var(--accent);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.settings-avatar__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .settings-profile__name {

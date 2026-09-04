@@ -24,7 +24,7 @@ form.addEventListener('submit', async function(event) {
             const data = await registerUser(email, password, firstName, lastName);
             console.log('успех:', data);
             localStorage.setItem('token', data.token);
-            window.location.href = 'index';
+            window.location.href = 'index.html';
         } catch (error) {
             console.error('Ошибка регистрации:', error);
             if (error.status === 409) {

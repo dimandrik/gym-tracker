@@ -6,17 +6,24 @@ import (
 	"gym_tracker/internal/auth"
 	"gym_tracker/internal/middleware"
 	"gym_tracker/internal/repository"
+	"gym_tracker/internal/storage"
 	"net/http"
 )
 
 type UserHandler struct {
-	userRepo *repository.UserRepository
+	userRepo  *repository.UserRepository
+	uploadDir string
+}
+
+func NewUserHandler(userRepo *repository.UserRepository, uploadDir string) *UserHandler {
+	return &UserHandler{userRepo: userRepo, uploadDir: uploadDir}
 }
 
 type ProfileResponse struct {
 	Email     string `json:"email"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+	PhotoURL  string `json:"photo_url"`
 }
 
 type UpdateNameRequest struct {
@@ -38,10 +45,6 @@ type DeleteAccountRequest struct {
 	Password string `json:"password"`
 }
 
-func NewUserHandler(userRepo *repository.UserRepository) *UserHandler {
-	return &UserHandler{userRepo: userRepo}
-}
-
 func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value(middleware.UserIDKey).(string)
 
@@ -55,6 +58,7 @@ func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		PhotoURL:  user.PhotoURL,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -179,6 +183,75 @@ func (h *UserHandler) DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	if err := h.userRepo.DeleteUser(r.Context(), userID); err != nil {
 		serverError(w, err, "failed to delete account")
 		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *UserHandler) UpdatePhoto(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, "invalid form data", http.StatusBadRequest)
+		return
+	}
+
+	file, header, err := r.FormFile("photo")
+	if err != nil {
+		http.Error(w, "photo is required", http.StatusBadRequest)
+		return
+	}
+	defer func() {
+		_ = file.Close()
+	}()
+
+	newPhotoURL, err := storage.SaveFile(file, header, h.uploadDir)
+	if err != nil {
+		http.Error(w, "failed to save photo", http.StatusInternalServerError)
+		return
+	}
+
+	oldUser, err := h.userRepo.GetUserByID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+	if oldUser == nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	if err := h.userRepo.UpdatePhoto(r.Context(), userID, newPhotoURL); err != nil {
+		_ = storage.DeleteFile(newPhotoURL, h.uploadDir)
+		serverError(w, err, "failed to update photo")
+		return
+	}
+
+	if oldUser.PhotoURL != "" {
+		_ = storage.DeleteFile(oldUser.PhotoURL, h.uploadDir)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(map[string]string{"photo_url": newPhotoURL})
+}
+
+func (h *UserHandler) DeletePhoto(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(middleware.UserIDKey).(string)
+
+	user, err := h.userRepo.GetUserByID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+		return
+	}
+
+	if err := h.userRepo.UpdatePhoto(r.Context(), userID, ""); err != nil {
+		serverError(w, err, "failed to delete photo")
+		return
+	}
+
+	if user.PhotoURL != "" {
+		_ = storage.DeleteFile(user.PhotoURL, h.uploadDir)
 	}
 
 	w.WriteHeader(http.StatusNoContent)

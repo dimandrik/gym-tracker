@@ -45,6 +45,8 @@ func New(
 	mux.HandleFunc("PUT /api/user/email", authMiddleware(userHandler.UpdateEmail))
 	mux.HandleFunc("PUT /api/user/password", authMiddleware(userHandler.UpdatePassword))
 	mux.HandleFunc("DELETE /api/user/account", authMiddleware(userHandler.DeleteAccount))
+	mux.HandleFunc("PUT /api/user/photo", authMiddleware(userHandler.UpdatePhoto))
+	mux.HandleFunc("DELETE /api/user/photo", authMiddleware(userHandler.DeletePhoto))
 	mux.HandleFunc("GET /api/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("ok"))

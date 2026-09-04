@@ -41,7 +41,7 @@ func main() {
 	machineHandler := handlers.NewMachineHandler(machineRepo, "uploads")
 	setHandler := handlers.NewSetHandler(workoutRepo, workoutItemRepo, setRepo, machineRepo)
 	workoutHandler := handlers.NewWorkoutHandler(workoutRepo)
-	userHandler := handlers.NewUserHandler(userRepo)
+	userHandler := handlers.NewUserHandler(userRepo, "uploads")
 
 	allowedOrigins := middleware.ParseAllowedOrigins(cfg.AllowedOrigins)
 	mux := router.New(authHandler, machineHandler, setHandler, workoutHandler, userHandler, cfg.JWTSecret, allowedOrigins)

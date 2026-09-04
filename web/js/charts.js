@@ -46,7 +46,7 @@ async function loadData() {
     allSets = await getSets(machineId);
     const machine = await getMachine(machineId);
     document.querySelector('#chart-subtitle').textContent = machine.name;
-    document.querySelector('#back-link').href = 'machine?id=' + machineId;
+    document.querySelector('#back-link').href = 'machine.html?id=' + machineId;
 
     renderTab('scatter');
 }

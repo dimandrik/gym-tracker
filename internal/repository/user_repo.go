@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"gym_tracker/internal/models"
@@ -36,12 +37,14 @@ func (r *UserRepository) CreateUser(ctx context.Context, email, passwordHash, fi
 }
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
-	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name FROM users WHERE email = $1", email)
+	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name, photo_url FROM users WHERE email = $1", email)
 	var u models.User
-	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName)
+	var photoURL sql.NullString
+	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName, &photoURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
+	u.PhotoURL = photoURL.String
 	return &u, nil
 }
 
@@ -80,12 +83,14 @@ func (r *UserRepository) UpdatePassword(ctx context.Context, userID, newPassword
 }
 
 func (r *UserRepository) GetUserByID(ctx context.Context, id string) (*models.User, error) {
-	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name FROM users WHERE id = $1", id)
+	row := r.pool.QueryRow(ctx, "SELECT id, email, password_hash, first_name, last_name, photo_url FROM users WHERE id = $1", id)
 	var u models.User
-	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName)
+	var photoURL sql.NullString
+	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FirstName, &u.LastName, &photoURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
 	}
+	u.PhotoURL = photoURL.String
 	return &u, nil
 }
 
@@ -93,6 +98,17 @@ func (r *UserRepository) DeleteUser(ctx context.Context, userID string) error {
 	result, err := r.pool.Exec(ctx, "DELETE FROM users WHERE id = $1", userID)
 	if err != nil {
 		return fmt.Errorf("failed to delete user: %w", err)
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("user not found")
+	}
+	return nil
+}
+
+func (r *UserRepository) UpdatePhoto(ctx context.Context, userID, photoURL string) error {
+	result, err := r.pool.Exec(ctx, "UPDATE users SET photo_url = $1 WHERE id = $2", photoURL, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update photo: %w", err)
 	}
 	if result.RowsAffected() == 0 {
 		return fmt.Errorf("user not found")

@@ -2,7 +2,7 @@ getToken();
 
 const machineId = new URLSearchParams(window.location.search).get('id');
 
-document.querySelector('#back-link').href = 'machine?id=' + machineId;
+document.querySelector('#back-link').href = 'machine.html?id=' + machineId;
 
 async function loadMachine() {
     try {
@@ -56,7 +56,7 @@ document.querySelector('#edit-machine-form').addEventListener('submit', async fu
 
     try {
         await updateMachine(machineId, formData);
-        window.location.href = 'machine?id=' + machineId;
+        window.location.href = 'machine.html?id=' + machineId;
     } catch (error) {
         errorEl.textContent = error.message;
         errorEl.style.display = 'block';
@@ -70,7 +70,7 @@ document.querySelector('#delete-machine-btn').addEventListener('click', async fu
 
     try {
         await deleteMachine(machineId);
-        window.location.href = 'index';
+        window.location.href = 'index.html';
     } catch (error) {
         alert('Не удалось удалить тренажёр: ' + error.message);
     }

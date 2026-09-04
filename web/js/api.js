@@ -3,7 +3,7 @@
 function getToken() {
     const token = localStorage.getItem('token');
     if (!token) {
-        window.location.href = 'login';
+        window.location.href = 'login.html';
     }
     return token;
 }
@@ -110,6 +110,17 @@ async function updateEmail(newEmail, currentPassword) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ new_email: newEmail, current_password: currentPassword })
     });
+}
+
+async function updatePhoto(formData) {
+    return apiFetch('/api/user/photo', {
+        method: 'PUT',
+        body: formData
+    });
+}
+
+async function deletePhoto() {
+    return apiFetch('/api/user/photo', { method: 'DELETE' });
 }
 
 async function updatePassword(currentPassword, newPassword) {
